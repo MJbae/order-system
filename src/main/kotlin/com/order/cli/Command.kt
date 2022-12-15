@@ -7,6 +7,7 @@ import com.order.cli.prompt.OrderCountPrompt
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.commands.Quit
+import kotlin.system.exitProcess
 
 @ShellComponent
 class Command(
@@ -37,5 +38,6 @@ class Command(
     @ShellMethod(key = ["quit", "q"], value = "quit")
     fun quit() {
         byePrinter.show()
+        exitProcess(1)
     }
 }
