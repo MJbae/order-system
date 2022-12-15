@@ -1,6 +1,9 @@
 package com.order.cli
 
+import com.order.application.OrderService
+import com.order.cli.dto.OrderData
 import com.order.cli.printer.ByePrinter
+import com.order.cli.printer.OrderProductPrinter
 import com.order.cli.printer.ProductPrinter
 import com.order.cli.prompt.ItemIdPrompt
 import com.order.cli.prompt.OrderCountPrompt
@@ -13,8 +16,11 @@ import kotlin.system.exitProcess
 class Command(
     private val productPrinter: ProductPrinter,
     private val byePrinter: ByePrinter,
+    private val orderProductPrinter: OrderProductPrinter,
     private val itemIdPrompt: ItemIdPrompt,
-    private val orderCountPrompt: OrderCountPrompt
+    private val orderCountPrompt: OrderCountPrompt,
+    private val orderService: OrderService,
+    private val orderData: ArrayList<OrderData>
 ) : Quit.Command {
     @ShellMethod(key = ["order", "o"], value = "order")
     fun order() {
@@ -22,16 +28,19 @@ class Command(
 
         while (true) {
             itemIdPrompt.display()
-            val itemInput = readlnOrNull()
+            val itemInput = readLine()
 
             if (itemInput.equals(" ")) {
+                val order = orderService.order(orderData)
+                orderProductPrinter.showBy(order)
+                orderData.clear()
                 break
             }
 
             orderCountPrompt.display()
-            val countInput = readlnOrNull()
+            val countInput = readLine()
 
-            println("상품번호: $itemInput, 주문수량: $countInput")
+            orderData.add(OrderData(itemInput!!.toLong(), countInput!!.toInt()))
         }
     }
 
