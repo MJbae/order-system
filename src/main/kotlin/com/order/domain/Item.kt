@@ -15,17 +15,17 @@ class Item(
     @Id
     @Column(name = "item_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    private var id: Long?,
 
-    val price: BigDecimal,
+    private val price: BigDecimal,
 
     @Column(name = "item_name")
-    val name: String,
+    private val name: String,
 
-    val stockQuantity: Int,
+    private val stockQuantity: Int,
 
     @Version
-    val version: Int
+    private var version: Int
 ) {
     override fun toString(): String {
         return "${this.id}    ${this.name}          ${this.price}원          ${this.stockQuantity}개"

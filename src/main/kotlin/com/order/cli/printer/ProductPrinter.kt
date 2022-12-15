@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component
 
 @Component
 class ProductPrinter(
-    val itemRepository: ItemRepository
+    private val itemRepository: ItemRepository
 ) : Printer {
     private var categoryMessage = "상품번호                 상품명               판매가격                재고수"
     override fun show() {

@@ -12,7 +12,7 @@ import javax.persistence.Table
 class Order(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long?,
+    private var id: Long?,
 
     val price: BigDecimal
 )
