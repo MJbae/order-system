@@ -6,13 +6,18 @@ import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
 import javax.persistence.Table
+import javax.persistence.Column
 
 @Entity
 @Table(name = "order_table")
 class Order(
     @Id
+    @Column(name = "order_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private var id: Long?,
+    var id: Long?,
 
-    val price: BigDecimal
-)
+    @Column(name = "order_price")
+    var price: BigDecimal
+) {
+    constructor() : this(null, BigDecimal(0))
+}
