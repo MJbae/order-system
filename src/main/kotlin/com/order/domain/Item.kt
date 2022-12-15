@@ -17,10 +17,10 @@ class Item(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private var id: Long?,
 
-    private val price: BigDecimal,
+    val price: BigDecimal,
 
     @Column(name = "item_name")
-    private val name: String,
+    val name: String,
 
     private val stockQuantity: Int,
 
