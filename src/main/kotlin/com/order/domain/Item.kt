@@ -22,7 +22,7 @@ class Item(
     @Column(name = "item_name")
     val name: String,
 
-    val stockQuantity: Int,
+    var stockQuantity: Int,
 
     @Version
     private var version: Int?
@@ -34,6 +34,10 @@ class Item(
         stockQuantity = stockQuantity,
         version = null
     )
+
+    fun decreaseStock(orderQuantity: Int) {
+        stockQuantity -= orderQuantity
+    }
 
     override fun toString(): String {
         return "${this.id}    ${this.name}          ${this.price}원          ${this.stockQuantity}개"

@@ -32,9 +32,11 @@ class OrderService(
             val item: Item = itemRepository.findByIdInLock(each.itemId)
             val orderItem = OrderItem(order, item, each.itemQuantity)
 
-            if (orderItem.quantity > item.stockQuantity) {
+            if (each.itemQuantity > item.stockQuantity) {
                 throw SoldOutException(soldOutMessage)
             }
+
+            item.decreaseStock(each.itemQuantity)
 
             orderItems.add(orderItem)
 
