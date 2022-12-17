@@ -17,7 +17,9 @@ import javax.transaction.Transactional
 class OrderService(
     private val orderRepository: OrderRepository,
     private val itemRepository: ItemRepository,
-    private val orderItemRepository: OrderItemRepository
+    private val orderItemRepository: OrderItemRepository,
+    private val freeDeliveryLimit: BigDecimal = BigDecimal(50000),
+    private val deliveryFee: BigDecimal = BigDecimal(2500)
 ) : OrderLogic<Order, OrderData> {
     override fun order(orderData: List<OrderData>): Order {
         val order = Order()
@@ -36,7 +38,7 @@ class OrderService(
             itemRepository.save(item)
         }
 
-        order.price = totalPrice
+        addDeliveryFeeByAmountLimit(freeDeliveryLimit, order, totalPrice, deliveryFee)
 
         orderRepository.save(order)
 
@@ -45,5 +47,19 @@ class OrderService(
         }
 
         return order
+    }
+
+    private fun addDeliveryFeeByAmountLimit(
+        amountLimit: BigDecimal,
+        order: Order,
+        totalPrice: BigDecimal,
+        deliveryFee: BigDecimal
+    ) {
+        if (totalPrice < amountLimit) {
+            order.price = totalPrice.add(deliveryFee)
+            return
+        }
+
+        order.price = totalPrice
     }
 }
