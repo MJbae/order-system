@@ -28,9 +28,10 @@ internal class OrderServiceUnitTest {
     private var orderCount = 0
     private var orderData: MutableList<OrderData>? = null
     private var stockQuantity = 0
+    private var itemPrice: BigDecimal? = null
     private val itemId = 778422L
     private val itemName = "캠핑덕 우드롤테이블"
-    private val itemPrice = BigDecimal.valueOf(45000)
+    private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
 
     @BeforeEach
     fun setUp() {
@@ -46,8 +47,9 @@ internal class OrderServiceUnitTest {
             fun setUp() {
                 orderCount = 2
                 stockQuantity = 3
+                itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice, itemName, stockQuantity)
+                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
                 orderItem = OrderItem(orderMocking!!, item!!, orderCount)
 
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
@@ -59,7 +61,35 @@ internal class OrderServiceUnitTest {
 
                 val order = service!!.order(orderData!!)
                 val actualPrice = order.price
-                val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderCount.toLong()))
+                val expectedPrice = itemPrice!!.multiply(BigDecimal.valueOf(orderCount.toLong()))
+
+                Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+            }
+        }
+
+        @Nested
+        internal inner class `만약 주문금액이 5만원 미만이면` {
+            @BeforeEach
+            fun setUp() {
+                orderCount = 1
+                stockQuantity = 3
+                itemPrice = BigDecimal.valueOf(45000)
+                orderMocking = Order(1L, BigDecimal(0))
+                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
+                orderItem = OrderItem(orderMocking!!, item!!, orderCount)
+
+                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
+            }
+
+            @Test
+            fun `주문금액에 배송료를 포함하고 반환한다`() {
+                orderData!!.add(OrderData(itemId, orderCount))
+
+                val order = service!!.order(orderData!!)
+                val actualPrice = order.price
+                val expectedPrice = itemPrice!!
+                    .multiply(BigDecimal.valueOf(orderCount.toLong()))
+                    .add(deliveryFee)
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
             }
