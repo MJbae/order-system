@@ -4,6 +4,7 @@ import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.Order
 import com.order.domain.OrderItem
+import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
 import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
@@ -11,6 +12,7 @@ import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.BDDMockito
 import org.mockito.Mockito
 import org.springframework.transaction.annotation.Transactional
@@ -122,6 +124,28 @@ internal class OrderServiceUnitTest {
                 val expectedPrice = priceSum + priceSum
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+            }
+        }
+
+        @Nested
+        internal inner class `만약 상품의 재고 보다 많은 수량을 주문한다면` {
+            @BeforeEach
+            fun setUp() {
+                orderQuantity = 4
+                stockQuantity = 3
+                itemPrice = BigDecimal.valueOf(45000)
+                orderMocking = Order(1L, BigDecimal(0))
+                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
+                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
+
+                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
+            }
+
+            @Test
+            fun `재고부족 예외를 발생시킨다`() {
+                orderData!!.add(OrderData(itemId, orderQuantity))
+
+                assertThrows<SoldOutException> { service!!.order(orderData!!) }
             }
         }
     }
