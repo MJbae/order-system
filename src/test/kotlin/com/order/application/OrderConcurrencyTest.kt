@@ -24,14 +24,14 @@ class OrderConcurrencyTest {
 
     private val orderData: MutableList<OrderData> = ArrayList()
     private val itemId = 778422L
-    private val orderItemCount = 1
-    private var stockQuantity = 0
+    private val orderQuantity = 1
+    private var stockQuantity = 7
 
     @BeforeEach
     fun setUp() {
         val item: Item = itemRepository!!.findByIdInLock(itemId)
         stockQuantity = item.stockQuantity
-        orderData.add(OrderData(itemId, orderItemCount))
+        orderData.add(OrderData(itemId, orderQuantity))
     }
 
     @Test
