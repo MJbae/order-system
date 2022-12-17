@@ -1,3 +1,5 @@
+name: Build with Gradle
+
 on:
   push:
     branches:
