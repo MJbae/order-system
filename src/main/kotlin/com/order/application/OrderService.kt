@@ -46,13 +46,9 @@ class OrderService(
             itemRepository.save(item)
         }
 
-        addDeliveryFeeByAmountLimit(freeDeliveryLimit, order, totalPrice, deliveryFee)
+        this.addDeliveryFeeByAmountLimit(freeDeliveryLimit, order, totalPrice, deliveryFee)
 
-        orderRepository.save(order)
-
-        for (each in orderItems) {
-            orderItemRepository.save(each)
-        }
+        this.saveOrder(order, orderItems)
 
         return order
     }
@@ -69,5 +65,16 @@ class OrderService(
         }
 
         order.price = totalPrice
+    }
+
+    private fun saveOrder(
+        order: Order,
+        orderItems: List<OrderItem>
+    ) {
+        orderRepository.save(order)
+
+        for (each in orderItems) {
+            orderItemRepository.save(each)
+        }
     }
 }
