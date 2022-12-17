@@ -25,8 +25,16 @@ class Item(
     private val stockQuantity: Int,
 
     @Version
-    private var version: Int
+    private var version: Int?
 ) {
+    constructor(id: Long?, price: BigDecimal, name: String, stockQuantity: Int) : this(
+        null,
+        price = price,
+        name = name,
+        stockQuantity = stockQuantity,
+        version = null
+    )
+
     override fun toString(): String {
         return "${this.id}    ${this.name}          ${this.price}원          ${this.stockQuantity}개"
     }
