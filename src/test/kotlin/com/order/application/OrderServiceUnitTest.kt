@@ -94,5 +94,35 @@ internal class OrderServiceUnitTest {
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
             }
         }
+
+        @Nested
+        internal inner class `만약 하나의 주문에 두 건 이상의 상품주문 내역이 있다면` {
+            @BeforeEach
+            fun setUp() {
+                orderQuantity = 1
+                stockQuantity = 3
+                itemPrice = BigDecimal.valueOf(45000)
+                orderMocking = Order(1L, BigDecimal(0))
+                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
+                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
+
+                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
+            }
+
+            @Test
+            fun `상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다`() {
+                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData!!.add(OrderData(itemId, orderQuantity))
+
+                val order = service!!.order(orderData!!)
+                val priceSum = itemPrice!!
+                    .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+
+                val actualPrice = order.price
+                val expectedPrice = priceSum + priceSum
+
+                Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+            }
+        }
     }
 }
