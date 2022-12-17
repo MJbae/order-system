@@ -5,6 +5,7 @@ import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.Order
 import com.order.domain.OrderItem
+import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
 import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
@@ -19,7 +20,8 @@ class OrderService(
     private val itemRepository: ItemRepository,
     private val orderItemRepository: OrderItemRepository,
     private val freeDeliveryLimit: BigDecimal = BigDecimal(50000),
-    private val deliveryFee: BigDecimal = BigDecimal(2500)
+    private val deliveryFee: BigDecimal = BigDecimal(2500),
+    private val soldOutMessage: String = "주문한 상품의 수가 재고량 보다 많습니다."
 ) : OrderLogic<Order, OrderData> {
     override fun order(orderData: List<OrderData>): Order {
         val order = Order()
@@ -29,6 +31,10 @@ class OrderService(
         for (each in orderData) {
             val item: Item = itemRepository.findByIdInLock(each.itemId)
             val orderItem = OrderItem(order, item, each.itemQuantity)
+
+            if (orderItem.quantity > item.stockQuantity) {
+                throw SoldOutException(soldOutMessage)
+            }
 
             orderItems.add(orderItem)
 

@@ -22,7 +22,7 @@ class Item(
     @Column(name = "item_name")
     val name: String,
 
-    private val stockQuantity: Int,
+    val stockQuantity: Int,
 
     @Version
     private var version: Int?
