@@ -28,7 +28,11 @@ docker run -it -p 50152:50152 order-system:latest
 ### 사용 기술
 * Application Framework: Spring Shell
 * RDBMS & ORM: H2, Spring Data JPA
-* Test Framework: JUnit
+* Test Framework: Kotest, JUnit
 
 ### 참고 자료
+* Test 
+  * Framework: [Kotest](https://kotest.io/)
+  * Mocking: [MockK](https://mockk.io/)
+  * BDD Style Test: [우형블로그](https://techblog.woowahan.com/5825/)
 * Spring Shell: [Baeldung](https://www.baeldung.com/spring-shell-cli)
