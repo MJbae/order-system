@@ -31,8 +31,8 @@ docker run -it -p 50152:50152 order-system:latest
 * Test Framework: Kotest, JUnit
 
 ### 참고 자료
-* Test 
-  * Framework: [Kotest](https://kotest.io/)
-  * Mocking: [MockK](https://mockk.io/)
-  * BDD Style Test: [우형블로그](https://techblog.woowahan.com/5825/)
-* Spring Shell: [Baeldung](https://www.baeldung.com/spring-shell-cli)
+* Test Framework: Kotest, [공식문서 참고](https://kotest.io/)
+* Test Style: BDD Test Style, [우형블로그 참고](https://techblog.woowahan.com/5825/)
+* Branch Coverage Plugin: JaCoCo, [Gradle 문서 설정 참고](https://docs.gradle.org/7.4.2/userguide/jacoco_plugin.html), [우형블로그 사용법 참고](https://techblog.woowahan.com/2661/)
+* Mocking: MockK, [공식문서 참고](https://mockk.io/)
+* Application Framework: Spring Shell, [Baeldung 블로그 참고](https://www.baeldung.com/spring-shell-cli)
