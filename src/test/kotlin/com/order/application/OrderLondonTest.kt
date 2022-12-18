@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
 @Transactional
-internal class OrderServiceUnitTest {
+internal class OrderLondonTest {
     private var service: OrderService? = null
     private val orderRepository = Mockito.mock(OrderRepository::class.java)
     private val orderItemRepository = Mockito.mock(OrderItemRepository::class.java)
@@ -27,10 +27,10 @@ internal class OrderServiceUnitTest {
     private var orderMocking: Order? = null
     private var item: Item? = null
     private var orderItem: OrderItem? = null
-    private var orderQuantity = 0
     private var orderData: MutableList<OrderData>? = null
-    private var stockQuantity = 0
     private var itemPrice: BigDecimal? = null
+    private var orderQuantity = 0
+    private val stockQuantity = 7
     private val itemId = 778422L
     private val itemName = "캠핑덕 우드롤테이블"
     private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
@@ -48,7 +48,6 @@ internal class OrderServiceUnitTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 2
-                stockQuantity = 3
                 itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
                 item = Item(itemId, itemPrice!!, itemName, stockQuantity)
@@ -74,7 +73,6 @@ internal class OrderServiceUnitTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                stockQuantity = 3
                 itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
                 item = Item(itemId, itemPrice!!, itemName, stockQuantity)
@@ -102,7 +100,6 @@ internal class OrderServiceUnitTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                stockQuantity = 3
                 itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
                 item = Item(itemId, itemPrice!!, itemName, stockQuantity)
@@ -131,8 +128,7 @@ internal class OrderServiceUnitTest {
         internal inner class `만약 상품의 재고 보다 많은 수량을 주문한다면` {
             @BeforeEach
             fun setUp() {
-                orderQuantity = 4
-                stockQuantity = 3
+                orderQuantity = 10 // stockQuantity = 7
                 itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
                 item = Item(itemId, itemPrice!!, itemName, stockQuantity)
@@ -153,8 +149,7 @@ internal class OrderServiceUnitTest {
         internal inner class `만약 두 건 이상의 상품주문 중 재고 보다 많은 상품을 주문한다면` {
             @BeforeEach
             fun setUp() {
-                orderQuantity = 2
-                stockQuantity = 3
+                orderQuantity = 5 // stockQuantity = 7
                 itemPrice = BigDecimal.valueOf(45000)
                 orderMocking = Order(1L, BigDecimal(0))
                 item = Item(itemId, itemPrice!!, itemName, stockQuantity)
