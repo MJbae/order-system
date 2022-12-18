@@ -1,4 +1,4 @@
-name: Build with Gradle
+name: CI with Gradle
 
 on:
   push:
@@ -33,4 +33,3 @@ jobs:
         if: ${{ always() }}
         with:
           files: build/test-results/**/*.xml
-          
