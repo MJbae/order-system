@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.mockito.BDDMockito
 import org.mockito.Mockito
+import org.mockito.Mockito.times
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
@@ -64,6 +65,7 @@ internal class OrderLondonTest {
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Mockito.verify(itemRepository, times(1)).findByIdInLock(itemId)
             }
         }
 
@@ -86,6 +88,7 @@ internal class OrderLondonTest {
                     .add(deliveryFee)
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Mockito.verify(itemRepository, times(1)).findByIdInLock(itemId)
             }
         }
 
@@ -110,6 +113,7 @@ internal class OrderLondonTest {
                 val expectedPrice = priceSum + priceSum
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Mockito.verify(itemRepository, times(2)).findByIdInLock(itemId)
             }
         }
 
@@ -126,6 +130,7 @@ internal class OrderLondonTest {
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
                 assertThrows<SoldOutException> { service!!.order(orderData!!) }
+                Mockito.verify(itemRepository, times(1)).findByIdInLock(itemId)
             }
         }
 
@@ -143,6 +148,7 @@ internal class OrderLondonTest {
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
                 assertThrows<SoldOutException> { service!!.order(orderData!!) }
+                Mockito.verify(itemRepository, times(2)).findByIdInLock(itemId)
             }
         }
     }
