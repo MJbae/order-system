@@ -1,9 +1,6 @@
 package com.order.application
 
 import com.order.cli.dto.OrderData
-import com.order.domain.Item
-import com.order.domain.Order
-import com.order.domain.OrderItem
 import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
 import com.order.infra.OrderItemRepository
@@ -22,36 +19,25 @@ import java.math.BigDecimal
 @Transactional
 internal class OrderClassicTest {
     @Autowired
-    private lateinit var service: OrderService
-
-    @Autowired
     private lateinit var orderRepository: OrderRepository
-
     @Autowired
     private lateinit var orderItemRepository: OrderItemRepository
-
     @Autowired
     private lateinit var itemRepository: ItemRepository
+    private lateinit var service: OrderService
 
-    private var order: Order? = null
-    private var item: Item? = null
-    private var orderItem: OrderItem? = null
+    private val orderData: ArrayList<OrderData> = ArrayList()
     private var orderQuantity = 0
-    private var orderData: MutableList<OrderData>? = null
+
     private val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
+    private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
     private val stockQuantity = 7
     private val itemId = 778422L
-    private val itemName = "캠핑덕 우드롤테이블"
-    private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
 
     @BeforeEach
     fun setUp() {
-        orderData = ArrayList()
+        orderData.clear()
         service = OrderService(orderRepository, itemRepository, orderItemRepository)
-
-        order = Order(1L, BigDecimal(0))
-        item = Item(itemId, itemPrice, itemName, stockQuantity)
-        orderItem = OrderItem(order!!, item!!, orderQuantity)
     }
 
     @Nested
@@ -65,8 +51,8 @@ internal class OrderClassicTest {
 
             @Test
             fun `주문금액에 배송료를 포함하지 않고 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData!!)
+                orderData.add(OrderData(itemId, orderQuantity))
+                val order = service.order(orderData)
 
                 val actualPrice = order.price
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
@@ -87,8 +73,8 @@ internal class OrderClassicTest {
 
             @Test
             fun `주문금액에 배송료를 포함하고 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData!!)
+                orderData.add(OrderData(itemId, orderQuantity))
+                val order = service.order(orderData)
 
                 val actualPrice = order.price
                 val expectedPrice = itemPrice
@@ -111,12 +97,11 @@ internal class OrderClassicTest {
 
             @Test
             fun `상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData!!)
+                orderData.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
+                val order = service.order(orderData)
 
-                val priceSum = itemPrice
-                    .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+                val priceSum = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                 val actualPrice = order.price
                 val expectedPrice = priceSum + priceSum
                 val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
@@ -136,12 +121,12 @@ internal class OrderClassicTest {
 
             @Test
             fun `재고부족 예외를 발생시킨다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
                 val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                 val expectedStockQuantity = stockQuantity
 
-                assertThrows<SoldOutException> { service.order(orderData!!) }
+                assertThrows<SoldOutException> { service.order(orderData) }
                 Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
@@ -155,13 +140,13 @@ internal class OrderClassicTest {
 
             @Test
             fun `재고부족 예외를 발생시킨다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
                 val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                 val expectedStockQuantity = stockQuantity
 
-                assertThrows<SoldOutException> { service.order(orderData!!) }
+                assertThrows<SoldOutException> { service.order(orderData) }
                 Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
