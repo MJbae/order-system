@@ -17,7 +17,7 @@ import java.math.BigDecimal
 
 @SpringBootTest
 @Transactional
-internal class OrderClassicTest {
+internal class OrderClassicalTest {
     @Autowired
     private lateinit var orderRepository: OrderRepository
     @Autowired
