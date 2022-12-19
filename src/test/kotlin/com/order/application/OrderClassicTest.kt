@@ -66,12 +66,15 @@ internal class OrderClassicTest {
             @Test
             fun `주문금액에 배송료를 포함하지 않고 반환한다`() {
                 orderData!!.add(OrderData(itemId, orderQuantity))
-
                 val order = service.order(orderData!!)
+
                 val actualPrice = order.price
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+                val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
+                val expectedStockQuantity = stockQuantity - orderQuantity
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
 
@@ -85,14 +88,17 @@ internal class OrderClassicTest {
             @Test
             fun `주문금액에 배송료를 포함하고 반환한다`() {
                 orderData!!.add(OrderData(itemId, orderQuantity))
-
                 val order = service.order(orderData!!)
+
                 val actualPrice = order.price
                 val expectedPrice = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     .add(deliveryFee)
+                val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
+                val expectedStockQuantity = stockQuantity - orderQuantity
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
 
@@ -107,15 +113,17 @@ internal class OrderClassicTest {
             fun `상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다`() {
                 orderData!!.add(OrderData(itemId, orderQuantity))
                 orderData!!.add(OrderData(itemId, orderQuantity))
-
                 val order = service.order(orderData!!)
+
                 val priceSum = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
-
                 val actualPrice = order.price
                 val expectedPrice = priceSum + priceSum
+                val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
+                val expectedStockQuantity = stockQuantity - orderQuantity - orderQuantity
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
+                Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
 
@@ -130,7 +138,11 @@ internal class OrderClassicTest {
             fun `재고부족 예외를 발생시킨다`() {
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
+                val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
+                val expectedStockQuantity = stockQuantity
+
                 assertThrows<SoldOutException> { service.order(orderData!!) }
+                Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
 
@@ -146,7 +158,11 @@ internal class OrderClassicTest {
                 orderData!!.add(OrderData(itemId, orderQuantity))
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
+                val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
+                val expectedStockQuantity = stockQuantity
+
                 assertThrows<SoldOutException> { service.order(orderData!!) }
+                Assertions.assertThat(actualStockQuantity).isEqualTo(expectedStockQuantity)
             }
         }
     }
