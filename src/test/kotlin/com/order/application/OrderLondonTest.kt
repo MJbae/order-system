@@ -2,8 +2,6 @@ package com.order.application
 
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
-import com.order.domain.Order
-import com.order.domain.OrderItem
 import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
 import com.order.infra.OrderItemRepository
@@ -21,29 +19,24 @@ import java.math.BigDecimal
 
 @Transactional
 internal class OrderLondonTest {
-    private var service: OrderService? = null
     private val orderRepository = Mockito.mock(OrderRepository::class.java)
     private val orderItemRepository = Mockito.mock(OrderItemRepository::class.java)
     private val itemRepository = Mockito.mock(ItemRepository::class.java)
-    private var order: Order? = null
-    private var item: Item? = null
-    private var orderItem: OrderItem? = null
-    private var orderData: MutableList<OrderData>? = null
+    private val service: OrderService = OrderService(orderRepository, itemRepository, orderItemRepository)
+
+    private val orderData: ArrayList<OrderData> = ArrayList()
     private var orderQuantity = 0
+
     private val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
     private val stockQuantity = 7
     private val itemId = 778422L
     private val itemName = "캠핑덕 우드롤테이블"
     private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
+    private val item: Item = Item(itemId, itemPrice, itemName, stockQuantity)
 
     @BeforeEach
     fun setUp() {
-        orderData = ArrayList()
-        service = OrderService(orderRepository, itemRepository, orderItemRepository)
-
-        order = Order(1L, BigDecimal(0))
-        item = Item(itemId, itemPrice, itemName, stockQuantity)
-        orderItem = OrderItem(order!!, item!!, orderQuantity)
+        orderData.clear()
     }
 
     @Nested
@@ -58,9 +51,9 @@ internal class OrderLondonTest {
 
             @Test
             fun `주문금액에 배송료를 포함하지 않고 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
-                val order = service!!.order(orderData!!)
+                val order = service.order(orderData)
                 val actualPrice = order.price
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
@@ -79,9 +72,9 @@ internal class OrderLondonTest {
 
             @Test
             fun `주문금액에 배송료를 포함하고 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
-                val order = service!!.order(orderData!!)
+                val order = service.order(orderData)
                 val actualPrice = order.price
                 val expectedPrice = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
@@ -102,10 +95,10 @@ internal class OrderLondonTest {
 
             @Test
             fun `상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
-                val order = service!!.order(orderData!!)
+                val order = service.order(orderData)
                 val priceSum = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
@@ -127,9 +120,9 @@ internal class OrderLondonTest {
 
             @Test
             fun `재고부족 예외를 발생시킨다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
-                assertThrows<SoldOutException> { service!!.order(orderData!!) }
+                assertThrows<SoldOutException> { service.order(orderData) }
                 Mockito.verify(itemRepository, times(1)).findByIdInLock(itemId)
             }
         }
@@ -144,10 +137,10 @@ internal class OrderLondonTest {
 
             @Test
             fun `재고부족 예외를 발생시킨다`() {
-                orderData!!.add(OrderData(itemId, orderQuantity))
-                orderData!!.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
+                orderData.add(OrderData(itemId, orderQuantity))
 
-                assertThrows<SoldOutException> { service!!.order(orderData!!) }
+                assertThrows<SoldOutException> { service.order(orderData) }
                 Mockito.verify(itemRepository, times(2)).findByIdInLock(itemId)
             }
         }
