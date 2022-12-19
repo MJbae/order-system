@@ -24,12 +24,12 @@ internal class OrderLondonTest {
     private val orderRepository = Mockito.mock(OrderRepository::class.java)
     private val orderItemRepository = Mockito.mock(OrderItemRepository::class.java)
     private val itemRepository = Mockito.mock(ItemRepository::class.java)
-    private var orderMocking: Order? = null
+    private var order: Order? = null
     private var item: Item? = null
     private var orderItem: OrderItem? = null
     private var orderData: MutableList<OrderData>? = null
-    private var itemPrice: BigDecimal? = null
     private var orderQuantity = 0
+    private val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
     private val stockQuantity = 7
     private val itemId = 778422L
     private val itemName = "캠핑덕 우드롤테이블"
@@ -39,6 +39,10 @@ internal class OrderLondonTest {
     fun setUp() {
         orderData = ArrayList()
         service = OrderService(orderRepository, itemRepository, orderItemRepository)
+
+        order = Order(1L, BigDecimal(0))
+        item = Item(itemId, itemPrice, itemName, stockQuantity)
+        orderItem = OrderItem(order!!, item!!, orderQuantity)
     }
 
     @Nested
@@ -48,11 +52,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 2
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
-
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
@@ -62,7 +61,7 @@ internal class OrderLondonTest {
 
                 val order = service!!.order(orderData!!)
                 val actualPrice = order.price
-                val expectedPrice = itemPrice!!.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+                val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
             }
@@ -73,11 +72,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
-
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
@@ -87,7 +81,7 @@ internal class OrderLondonTest {
 
                 val order = service!!.order(orderData!!)
                 val actualPrice = order.price
-                val expectedPrice = itemPrice!!
+                val expectedPrice = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     .add(deliveryFee)
 
@@ -100,11 +94,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
-
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
@@ -114,7 +103,7 @@ internal class OrderLondonTest {
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
                 val order = service!!.order(orderData!!)
-                val priceSum = itemPrice!!
+                val priceSum = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
                 val actualPrice = order.price
@@ -129,11 +118,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 10 // stockQuantity = 7
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
-
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
@@ -150,11 +134,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 5 // stockQuantity = 7
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
-
                 BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 

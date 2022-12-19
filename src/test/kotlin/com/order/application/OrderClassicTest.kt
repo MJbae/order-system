@@ -33,13 +33,13 @@ internal class OrderClassicTest {
     @Autowired
     private lateinit var itemRepository: ItemRepository
 
-    private var orderMocking: Order? = null
+    private var order: Order? = null
     private var item: Item? = null
     private var orderItem: OrderItem? = null
     private var orderQuantity = 0
     private var orderData: MutableList<OrderData>? = null
+    private val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
     private val stockQuantity = 7
-    private var itemPrice: BigDecimal? = null
     private val itemId = 778422L
     private val itemName = "캠핑덕 우드롤테이블"
     private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
@@ -48,6 +48,10 @@ internal class OrderClassicTest {
     fun setUp() {
         orderData = ArrayList()
         service = OrderService(orderRepository, itemRepository, orderItemRepository)
+
+        order = Order(1L, BigDecimal(0))
+        item = Item(itemId, itemPrice, itemName, stockQuantity)
+        orderItem = OrderItem(order!!, item!!, orderQuantity)
     }
 
     @Nested
@@ -57,10 +61,6 @@ internal class OrderClassicTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 2
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
             }
 
             @Test
@@ -69,7 +69,7 @@ internal class OrderClassicTest {
 
                 val order = service.order(orderData!!)
                 val actualPrice = order.price
-                val expectedPrice = itemPrice!!.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+                val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
                 Assertions.assertThat(actualPrice).isEqualTo(expectedPrice)
             }
@@ -80,10 +80,6 @@ internal class OrderClassicTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
             }
 
             @Test
@@ -92,7 +88,7 @@ internal class OrderClassicTest {
 
                 val order = service.order(orderData!!)
                 val actualPrice = order.price
-                val expectedPrice = itemPrice!!
+                val expectedPrice = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     .add(deliveryFee)
 
@@ -105,10 +101,6 @@ internal class OrderClassicTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
             }
 
             @Test
@@ -117,7 +109,7 @@ internal class OrderClassicTest {
                 orderData!!.add(OrderData(itemId, orderQuantity))
 
                 val order = service.order(orderData!!)
-                val priceSum = itemPrice!!
+                val priceSum = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
                 val actualPrice = order.price
@@ -132,10 +124,6 @@ internal class OrderClassicTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 10 // stockQuantity = 7
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
             }
 
             @Test
@@ -151,10 +139,6 @@ internal class OrderClassicTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 5 // stockQuantity = 7
-                itemPrice = BigDecimal.valueOf(45000)
-                orderMocking = Order(1L, BigDecimal(0))
-                item = Item(itemId, itemPrice!!, itemName, stockQuantity)
-                orderItem = OrderItem(orderMocking!!, item!!, orderQuantity)
             }
 
             @Test
