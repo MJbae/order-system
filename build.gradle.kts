@@ -1,5 +1,10 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val springShellVersion = "2.1.4"
+val mockkVersion = "1.13.3"
+val kotestVersion = "5.5.4"
+val kotestExtensionVersion = "1.1.2"
+
 plugins {
     id("org.springframework.boot") version "2.7.6"
     id("io.spring.dependency-management") version "1.0.15.RELEASE"
@@ -18,11 +23,6 @@ repositories {
     mavenCentral()
 }
 
-extra["springShellVersion"] = "2.1.4"
-extra["mockkVersion"] = "1.13.3"
-extra["kotestVersion"] = "5.5.4"
-extra["kotestExtensionVersion"] = "1.1.2"
-
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.shell:spring-shell-starter")
@@ -31,15 +31,15 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     runtimeOnly("com.h2database:h2")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
-    testImplementation("io.mockk:mockk:${property("mockkVersion")}")
-    testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
-    testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
-    testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtensionVersion")}")
+    testImplementation("io.mockk:mockk:$mockkVersion")
+    testImplementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+    testImplementation("io.kotest:kotest-assertions-core:$kotestVersion")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:$kotestExtensionVersion")
 }
 
 dependencyManagement {
     imports {
-        mavenBom("org.springframework.shell:spring-shell-dependencies:${property("springShellVersion")}")
+        mavenBom("org.springframework.shell:spring-shell-dependencies:$springShellVersion")
     }
 }
 
