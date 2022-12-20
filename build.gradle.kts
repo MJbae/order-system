@@ -77,20 +77,26 @@ tasks.jacocoTestReport {
 tasks.jacocoTestCoverageVerification {
     violationRules {
         rule {
+            isEnabled = true
+            element = "BUNDLE"
+            includes = listOf("com.order.*")
+
             limit {
-                minimum = "0.6".toBigDecimal()
+                counter = "LINE"
+                value = "COVEREDRATIO"
+                minimum = "0.50".toBigDecimal()
             }
         }
 
         rule {
-            isEnabled = false
-            element = "CLASS"
-            includes = listOf("org.gradle.*")
+            isEnabled = true
+            element = "BUNDLE"
+            includes = listOf("com.order.*")
 
             limit {
                 counter = "BRANCH"
                 value = "COVEREDRATIO"
-                maximum = "0.60".toBigDecimal()
+                minimum = "0.60".toBigDecimal()
             }
         }
     }
