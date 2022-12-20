@@ -5,10 +5,10 @@ import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
 import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
-import org.junit.jupiter.api.assertThrows
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
 import java.math.BigDecimal
@@ -100,7 +100,7 @@ class OrderClassicalDslTest(
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                     val expectedStockQuantity = stockQuantity
 
-                    assertThrows<SoldOutException> { service.order(orderData) }
+                    shouldThrow<SoldOutException> { service.order(orderData) }
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
@@ -115,7 +115,7 @@ class OrderClassicalDslTest(
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                     val expectedStockQuantity = stockQuantity
 
-                    assertThrows<SoldOutException> { service.order(orderData) }
+                    shouldThrow<SoldOutException> { service.order(orderData) }
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
