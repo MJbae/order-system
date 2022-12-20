@@ -21,6 +21,7 @@ repositories {
 extra["springShellVersion"] = "2.1.4"
 extra["mockkVersion"] = "1.13.3"
 extra["kotestVersion"] = "5.5.4"
+extra["kotestExtensionVersion"] = "1.1.2"
 
 dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
@@ -33,6 +34,7 @@ dependencies {
     testImplementation("io.mockk:mockk:${property("mockkVersion")}")
     testImplementation("io.kotest:kotest-runner-junit5:${property("kotestVersion")}")
     testImplementation("io.kotest:kotest-assertions-core:${property("kotestVersion")}")
+    testImplementation("io.kotest.extensions:kotest-extensions-spring:${property("kotestExtensionVersion")}")
 }
 
 dependencyManagement {
