@@ -37,6 +37,7 @@ internal class OrderLondonTest {
     @BeforeEach
     fun setUp() {
         orderData.clear()
+        BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
     }
 
     @Nested
@@ -46,7 +47,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 2
-                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
             @Test
@@ -67,7 +67,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
             @Test
@@ -90,7 +89,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 1
-                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
             @Test
@@ -115,7 +113,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 10 // stockQuantity = 7
-                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
             @Test
@@ -132,7 +129,6 @@ internal class OrderLondonTest {
             @BeforeEach
             fun setUp() {
                 orderQuantity = 5 // stockQuantity = 7
-                BDDMockito.given(itemRepository.findByIdInLock(itemId)).willReturn(item)
             }
 
             @Test
