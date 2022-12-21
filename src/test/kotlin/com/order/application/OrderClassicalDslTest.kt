@@ -18,16 +18,16 @@ class OrderClassicalDslTest(
     @Autowired private val orderRepository: OrderRepository,
     @Autowired private val orderItemRepository: OrderItemRepository,
     @Autowired private val itemRepository: ItemRepository,
-
-    private var orderQuantity: Int = 0,
-    private val orderData: ArrayList<OrderData> = ArrayList(),
-
-    private val itemPrice: BigDecimal = BigDecimal.valueOf(45000),
-    private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500),
-    private val stockQuantity: Int = 7,
-    private val itemId: Long = 778422L
 ) : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
+
+    private var orderQuantity: Int = 0
+    private val orderData: ArrayList<OrderData> = ArrayList()
+
+    private val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
+    private val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
+    private val stockQuantity: Int = 7
+    private val itemId: Long = 778422L
 
     init {
         this.beforeTest {
