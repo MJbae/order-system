@@ -19,10 +19,11 @@ class OrderService(
     private val orderRepository: OrderRepository,
     private val itemRepository: ItemRepository,
     private val orderItemRepository: OrderItemRepository,
-    private val freeDeliveryLimit: BigDecimal = BigDecimal(50000),
-    private val deliveryFee: BigDecimal = BigDecimal(2500),
-    private val soldOutMessage: String = "주문한 상품의 수가 재고량 보다 많습니다."
 ) : OrderLogic<Order, OrderData> {
+    private val freeDeliveryLimit: BigDecimal = BigDecimal(50000)
+    private val deliveryFee: BigDecimal = BigDecimal(2500)
+    private val soldOutMessage: String = "주문한 상품의 수가 재고량 보다 많습니다."
+
     override fun order(orderData: List<OrderData>): Order {
         val order = Order()
         val orderItems: ArrayList<OrderItem> = ArrayList()
