@@ -1,11 +1,13 @@
 package com.order.domain
 
 import java.math.BigDecimal
+import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
 import javax.persistence.Id
+import javax.persistence.OneToMany
 import javax.persistence.Table
 
 @Entity
@@ -17,7 +19,10 @@ class Order(
     var id: Long?,
 
     @Column(name = "order_price")
-    var price: BigDecimal
+    var price: BigDecimal,
+
+    @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
+    var orderItems: MutableList<OrderItem>
 ) {
-    constructor() : this(null, BigDecimal(0))
+    constructor() : this(null, BigDecimal(0), arrayListOf())
 }
