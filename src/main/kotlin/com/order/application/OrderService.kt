@@ -24,20 +24,16 @@ class OrderService(
 
     override fun order(orderData: List<OrderData>): Order {
         val order = Order()
-        val orderItems: ArrayList<OrderItem> = ArrayList()
         var totalPrice = BigDecimal.ZERO
 
         for (each in orderData) {
             val item: Item = itemRepository.findByIdInLock(each.itemId)
-            val orderItem = OrderItem(order, item, each.itemQuantity)
 
             if (each.itemQuantity > item.stockQuantity) {
                 throw SoldOutException(soldOutMessage)
             }
 
             item.decreaseStock(each.itemQuantity)
-
-            orderItems.add(orderItem)
 
             val priceSum = each.itemQuantity.times(item.price.toLong())
             totalPrice += BigDecimal.valueOf(priceSum)
@@ -47,7 +43,7 @@ class OrderService(
 
         this.addDeliveryFeeByAmountLimit(freeDeliveryLimit, order, totalPrice, deliveryFee)
 
-        this.saveOrder(order, orderItems)
+        this.saveOrder(order, order.orderItems)
 
         return order
     }
