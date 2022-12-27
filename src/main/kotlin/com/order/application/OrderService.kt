@@ -7,7 +7,6 @@ import com.order.domain.Order
 import com.order.domain.OrderItem
 import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
-import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
@@ -18,7 +17,6 @@ import javax.transaction.Transactional
 class OrderService(
     private val orderRepository: OrderRepository,
     private val itemRepository: ItemRepository,
-    private val orderItemRepository: OrderItemRepository,
 ) : OrderLogic<Order, OrderData> {
     private val freeDeliveryLimit: BigDecimal = BigDecimal(50000)
     private val deliveryFee: BigDecimal = BigDecimal(2500)
@@ -72,10 +70,7 @@ class OrderService(
         order: Order,
         orderItems: List<OrderItem>
     ) {
+        orderItems.forEach { orderItem -> order.orderItems.add(orderItem) }
         orderRepository.save(order)
-
-        for (each in orderItems) {
-            orderItemRepository.save(each)
-        }
     }
 }

@@ -3,20 +3,19 @@ package com.order.cli.printer
 import com.order.cli.interfaces.OrderItemPrinter
 import com.order.domain.Order
 import com.order.domain.OrderItem
-import com.order.infra.OrderItemRepository
+import com.order.infra.OrderRepository
 import org.springframework.stereotype.Component
 
 @Component
 class OrderProductPrinter(
-    private val orderItemRepository: OrderItemRepository
+    private val orderRepository: OrderRepository
 ) : OrderItemPrinter<Order> {
     override fun showBy(order: Order) {
-        val orderItems = orderItemRepository.findAllByOrderId(order.id!!)
         println("- - - - - - - - - - - - - - - - - - - -")
-        orderItems.forEach { orderItem -> showOrderItemMessage(orderItem) }
+        order.orderItems.forEach { orderItem -> showOrderItemMessage(orderItem) }
 
         println("- - - - - - - - - - - - - - - - - - - -")
-        this.showPriceOrdering(orderItems)
+        this.showPriceOrdering(order.orderItems)
 
         println("- - - - - - - - - - - - - - - - - - - -")
         this.showPricePaying(order)
