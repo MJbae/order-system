@@ -24,5 +24,22 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItem>
 ) {
+    fun addDeliveryFeeByAmountLimit(totalPrice: BigDecimal) {
+
+        val freeDeliveryLimit = BigDecimal(50000)
+        val deliveryFee = BigDecimal(2500)
+
+        if (totalPrice < freeDeliveryLimit) {
+            this.price = totalPrice.add(deliveryFee)
+            return
+        }
+
+        this.price = totalPrice
+    }
+
+    fun updateWith(orderItems: MutableList<OrderItem>) {
+        orderItems.forEach { orderItem -> this.orderItems.add(orderItem) }
+    }
+
     constructor() : this(null, BigDecimal(0), arrayListOf())
 }
