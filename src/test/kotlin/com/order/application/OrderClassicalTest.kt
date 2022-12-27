@@ -35,7 +35,7 @@ internal class OrderClassicalTest {
     @BeforeEach
     fun setUp() {
         orderData.clear()
-        service = OrderService(orderRepository, itemRepository, orderItemRepository)
+        service = OrderService(orderRepository, itemRepository)
     }
 
     @Nested

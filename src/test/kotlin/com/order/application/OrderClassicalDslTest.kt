@@ -32,7 +32,7 @@ class OrderClassicalDslTest(
     init {
         this.beforeTest {
             orderData.clear()
-            service = OrderService(orderRepository, itemRepository, orderItemRepository)
+            service = OrderService(orderRepository, itemRepository)
         }
         this.describe("order 메소드는") {
             context("만약 주문금액이 5만원 이상이면") {

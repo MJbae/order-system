@@ -4,7 +4,6 @@ import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
-import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
@@ -20,9 +19,8 @@ import java.math.BigDecimal
 @Transactional
 internal class OrderLondonTest {
     private val orderRepository = Mockito.mock(OrderRepository::class.java)
-    private val orderItemRepository = Mockito.mock(OrderItemRepository::class.java)
     private val itemRepository = Mockito.mock(ItemRepository::class.java)
-    private val service: OrderService = OrderService(orderRepository, itemRepository, orderItemRepository)
+    private val service: OrderService = OrderService(orderRepository, itemRepository)
 
     private val orderData: ArrayList<OrderData> = ArrayList()
     private var orderQuantity = 0

@@ -25,7 +25,7 @@ internal class OrderLondonDslTest : DescribeSpec({
     val orderRepository = mockk<OrderRepository>()
     val orderItemRepository = mockk<OrderItemRepository>()
     val itemRepository = mockk<ItemRepository>()
-    val service = OrderService(orderRepository, itemRepository, orderItemRepository)
+    val service = OrderService(orderRepository, itemRepository)
 
     var orderQuantity = 0
     val orderData: ArrayList<OrderData> = ArrayList()
@@ -41,7 +41,7 @@ internal class OrderLondonDslTest : DescribeSpec({
         orderData.clear()
 
         val orderPrice = BigDecimal.valueOf(90000)
-        val order = Order(null, orderPrice)
+        val order = Order(null, orderPrice, arrayListOf())
 
         every { itemRepository.findByIdInLock(itemId) } returns item
         every { itemRepository.save(any()) } returns item
