@@ -3,7 +3,6 @@ package com.order.application
 import com.order.cli.dto.OrderData
 import com.order.exception.SoldOutException
 import com.order.infra.ItemRepository
-import com.order.infra.OrderItemRepository
 import com.order.infra.OrderRepository
 import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.style.DescribeSpec
@@ -16,7 +15,6 @@ import java.math.BigDecimal
 @DataJpaTest
 class OrderClassicalDslTest(
     @Autowired private val orderRepository: OrderRepository,
-    @Autowired private val orderItemRepository: OrderItemRepository,
     @Autowired private val itemRepository: ItemRepository,
 ) : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
@@ -34,12 +32,12 @@ class OrderClassicalDslTest(
             orderData.clear()
             service = OrderService(orderRepository, itemRepository)
         }
-        this.describe("order 메소드는") {
-            context("만약 주문금액이 5만원 이상이면") {
+        this.describe("주문 시") {
+            context("주문금액이 5만원 이상이라면") {
                 this.beforeTest {
                     orderQuantity = 2
                 }
-                it("주문금액에 배송료를 포함하지 않고 반환한다") {
+                it("주문금액에 배송료를 포함하지 않는다") {
                     orderData.add(OrderData(itemId, orderQuantity))
                     val order = service.order(orderData)
 
@@ -52,11 +50,11 @@ class OrderClassicalDslTest(
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
-            context("만약 주문금액이 5만원 미만이면") {
+            context("주문금액이 5만원 미만이라면") {
                 this.beforeTest {
                     orderQuantity = 1
                 }
-                it("주문금액에 배송료를 포함하고 반환한다") {
+                it("주문금액에 배송료를 포함한다") {
                     orderData.add(OrderData(itemId, orderQuantity))
                     val order = service.order(orderData)
 
@@ -71,11 +69,11 @@ class OrderClassicalDslTest(
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
-            context("만약 하나의 주문에 두 건 이상의 상품주문 내역이 있다면") {
+            context("두 건 이상의 상품주문이 포함된다면") {
                 this.beforeTest {
                     orderQuantity = 1
                 }
-                it("상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다") {
+                it("주문금액에 해당 상품 금액의 합이 반영된다") {
                     orderData.add(OrderData(itemId, orderQuantity))
                     orderData.add(OrderData(itemId, orderQuantity))
                     val order = service.order(orderData)
@@ -90,11 +88,11 @@ class OrderClassicalDslTest(
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
-            context("만약 상품의 재고 보다 많은 수량을 주문한다면") {
+            context("상품의 재고 보다 많은 수량이 주문된다면") {
                 this.beforeTest {
                     orderQuantity = 10 // stockQuantity = 7
                 }
-                it("재고부족 예외를 발생시킨다") {
+                it("주문이 실패한다") {
                     orderData.add(OrderData(itemId, orderQuantity))
 
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
@@ -104,11 +102,11 @@ class OrderClassicalDslTest(
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
-            context("만약 두 건 이상의 상품주문 중 재고 보다 많은 상품을 주문한다면") {
+            context("두 건 이상의 상품주문 중 재고 보다 많은 상품이 주문된다면") {
                 this.beforeTest {
                     orderQuantity = 5 // stockQuantity = 7
                 }
-                it("재고부족 예외를 발생시킨다") {
+                it("주문이 실패한다") {
                     orderData.add(OrderData(itemId, orderQuantity))
                     orderData.add(OrderData(itemId, orderQuantity))
 
