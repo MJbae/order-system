@@ -50,8 +50,8 @@ internal class OrderClassicalTest {
             @Test
             fun `주문금액에 배송료를 포함하지 않고 반환한다`() {
                 orderData.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData)
 
+                val order = service.order(orderData)
                 val actualPrice = order.price
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                 val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
@@ -72,8 +72,8 @@ internal class OrderClassicalTest {
             @Test
             fun `주문금액에 배송료를 포함하고 반환한다`() {
                 orderData.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData)
 
+                val order = service.order(orderData)
                 val actualPrice = order.price
                 val expectedPrice = itemPrice
                     .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
@@ -97,8 +97,8 @@ internal class OrderClassicalTest {
             fun `상품주문 내역 금액의 합을 주문금액에 반영하여 반환한다`() {
                 orderData.add(OrderData(itemId, orderQuantity))
                 orderData.add(OrderData(itemId, orderQuantity))
-                val order = service.order(orderData)
 
+                val order = service.order(orderData)
                 val priceSum = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                 val actualPrice = order.price
                 val expectedPrice = priceSum + priceSum

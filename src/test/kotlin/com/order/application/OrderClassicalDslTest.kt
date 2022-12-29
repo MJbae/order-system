@@ -39,8 +39,8 @@ class OrderClassicalDslTest(
                 }
                 it("주문금액에 배송료를 포함하지 않는다") {
                     orderData.add(OrderData(itemId, orderQuantity))
-                    val order = service.order(orderData)
 
+                    val order = service.order(orderData)
                     val actualPrice = order.price
                     val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
@@ -56,8 +56,8 @@ class OrderClassicalDslTest(
                 }
                 it("주문금액에 배송료를 포함한다") {
                     orderData.add(OrderData(itemId, orderQuantity))
-                    val order = service.order(orderData)
 
+                    val order = service.order(orderData)
                     val actualPrice = order.price
                     val expectedPrice = itemPrice
                         .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
@@ -76,8 +76,8 @@ class OrderClassicalDslTest(
                 it("주문금액에 해당 상품 금액의 합이 반영된다") {
                     orderData.add(OrderData(itemId, orderQuantity))
                     orderData.add(OrderData(itemId, orderQuantity))
-                    val order = service.order(orderData)
 
+                    val order = service.order(orderData)
                     val priceSum = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     val actualPrice = order.price
                     val expectedPrice = priceSum + priceSum
