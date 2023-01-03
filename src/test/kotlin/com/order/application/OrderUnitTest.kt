@@ -22,7 +22,7 @@ internal class OrderUnitTest : DescribeSpec({
 
     describe("주문 시") {
         context("주문금액이 5만원 이상이라면") {
-            this.beforeTest {
+            beforeTest {
                 orderQuantity = 2
             }
             it("주문금액에 배송료를 포함하지 않는다") {
@@ -31,13 +31,13 @@ internal class OrderUnitTest : DescribeSpec({
                 val orderData = OrderData(itemId, orderQuantity, item)
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
 
-                val order = sut.order(orderData)
+                val result = sut.order(orderData)
 
-                order.price shouldBe expectedPrice
+                result.order!!.price shouldBe expectedPrice
             }
         }
         context("주문금액이 5만원 미만이라면") {
-            this.beforeTest {
+            beforeTest {
                 orderQuantity = 1
             }
             it("주문금액에 배송료를 포함한다") {
@@ -46,9 +46,23 @@ internal class OrderUnitTest : DescribeSpec({
                 val orderData = OrderData(itemId, orderQuantity, item)
                 val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong())).add(deliveryFee)
 
-                val order = sut.order(orderData)
+                val result = sut.order(orderData)
 
-                order.price shouldBe expectedPrice
+                result.order!!.price shouldBe expectedPrice
+            }
+        }
+        context("상품의 재고 보다 많은 수량이 주문된다면") {
+            beforeTest {
+                orderQuantity = 10 // stockQuantity = 7
+            }
+            it("주문이 실패한다") {
+                val sut = Customer()
+                val item = Item(itemId, itemPrice, itemName, stockQuantity)
+                val orderData = OrderData(itemId, orderQuantity, item)
+
+                val result = sut.order(orderData)
+
+                result.isSuccess shouldBe false
             }
         }
     }
