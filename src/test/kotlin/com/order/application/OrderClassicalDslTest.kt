@@ -30,7 +30,7 @@ class OrderClassicalDslTest(
     init {
         this.beforeTest {
             orderData.clear()
-            service = OrderService(orderRepository, itemRepository)
+            sut = OrderService(orderRepository, itemRepository)
         }
         this.describe("주문 시") {
             context("주문금액이 5만원 이상이라면") {
@@ -40,7 +40,7 @@ class OrderClassicalDslTest(
                 it("주문금액에 배송료를 포함하지 않는다") {
                     orderData.add(OrderData(itemId, orderQuantity))
 
-                    val order = service.order(orderData)
+                    val order = sut.order(orderData)
                     val actualPrice = order.price
                     val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
@@ -57,7 +57,7 @@ class OrderClassicalDslTest(
                 it("주문금액에 배송료를 포함한다") {
                     orderData.add(OrderData(itemId, orderQuantity))
 
-                    val order = service.order(orderData)
+                    val order = sut.order(orderData)
                     val actualPrice = order.price
                     val expectedPrice = itemPrice
                         .multiply(BigDecimal.valueOf(orderQuantity.toLong()))
@@ -77,7 +77,7 @@ class OrderClassicalDslTest(
                     orderData.add(OrderData(itemId, orderQuantity))
                     orderData.add(OrderData(itemId, orderQuantity))
 
-                    val order = service.order(orderData)
+                    val order = sut.order(orderData)
                     val priceSum = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
                     val actualPrice = order.price
                     val expectedPrice = priceSum + priceSum
@@ -98,7 +98,7 @@ class OrderClassicalDslTest(
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                     val expectedStockQuantity = stockQuantity
 
-                    shouldThrow<SoldOutException> { service.order(orderData) }
+                    shouldThrow<SoldOutException> { sut.order(orderData) }
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
@@ -113,7 +113,7 @@ class OrderClassicalDslTest(
                     val actualStockQuantity = itemRepository.findByIdInLock(itemId).stockQuantity
                     val expectedStockQuantity = stockQuantity
 
-                    shouldThrow<SoldOutException> { service.order(orderData) }
+                    shouldThrow<SoldOutException> { sut.order(orderData) }
                     actualStockQuantity shouldBe expectedStockQuantity
                 }
             }
@@ -121,6 +121,6 @@ class OrderClassicalDslTest(
     }
 
     companion object {
-        private lateinit var service: OrderService
+        private lateinit var sut: OrderService
     }
 }
