@@ -13,17 +13,19 @@ import java.math.BigDecimal
 internal class OrderUnitTest : DescribeSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
-    val itemPrice: BigDecimal = BigDecimal.valueOf(45000)
-    val deliveryFee: BigDecimal = BigDecimal.valueOf(2500)
-    val stockQuantity = 7
     val itemName = "캠핑덕 우드롤테이블"
     val itemId = 778422L
+    var itemPrice: BigDecimal = BigDecimal.ZERO
+    var deliveryFee: BigDecimal = BigDecimal.ZERO
     var orderQuantity = 0
+    var stockQuantity = 0
 
     describe("주문 시") {
         context("주문금액이 5만원 이상이라면") {
             beforeTest {
                 orderQuantity = 2
+                stockQuantity = 7
+                itemPrice = BigDecimal.valueOf(45000)
             }
             it("주문금액에 배송료를 포함하지 않는다") {
                 val sut = Customer()
@@ -38,7 +40,10 @@ internal class OrderUnitTest : DescribeSpec({
         }
         context("주문금액이 5만원 미만이라면") {
             beforeTest {
-                orderQuantity = 1
+                orderQuantity = 2
+                stockQuantity = 7
+                itemPrice = BigDecimal.valueOf(45000)
+                deliveryFee = BigDecimal.valueOf(2500)
             }
             it("주문금액에 배송료를 포함한다") {
                 val sut = Customer()
@@ -53,7 +58,9 @@ internal class OrderUnitTest : DescribeSpec({
         }
         context("상품의 재고 보다 많은 수량이 주문된다면") {
             beforeTest {
-                orderQuantity = 10 // stockQuantity = 7
+                orderQuantity = 10
+                stockQuantity = 7
+                itemPrice = BigDecimal.valueOf(45000)
             }
             it("주문이 실패한다") {
                 val sut = Customer()
