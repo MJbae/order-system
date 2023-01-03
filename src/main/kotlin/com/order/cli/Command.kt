@@ -19,7 +19,7 @@ class Command(
     private val orderProductPrinter: OrderProductPrinter,
     private val itemIdPrompt: ItemIdPrompt,
     private val orderCountPrompt: OrderCountPrompt,
-    private val orderService: OrderService,
+    private val orderServiceImp: OrderServiceImp,
     private val orderData: ArrayList<OrderData>
 ) : Quit.Command {
     @ShellMethod(key = ["order", "o"], value = "order")
@@ -31,7 +31,7 @@ class Command(
             val itemInput = readLine()
 
             if (itemInput.equals(" ")) {
-                val order = orderService.order(orderData)
+                val order = orderServiceImp.order(orderData[0])
                 orderProductPrinter.showBy(order)
                 orderData.clear()
                 break
