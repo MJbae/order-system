@@ -1,6 +1,9 @@
 package com.order.cli.dto
 
+import com.order.domain.Item
+
 class OrderData(
     val itemId: Long,
-    val itemQuantity: Int
+    val orderQuantity: Int,
+    var item: Item?
 )

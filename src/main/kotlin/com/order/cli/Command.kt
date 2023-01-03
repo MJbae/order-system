@@ -1,6 +1,6 @@
 package com.order.cli
 
-import com.order.application.OrderService
+import com.order.application.OrderServiceImp
 import com.order.cli.dto.OrderData
 import com.order.cli.printer.ByePrinter
 import com.order.cli.printer.OrderProductPrinter
@@ -40,7 +40,7 @@ class Command(
             orderCountPrompt.display()
             val countInput = readLine()
 
-            orderData.add(OrderData(itemInput!!.toLong(), countInput!!.toInt()))
+            orderData.add(OrderData(itemInput!!.toLong(), countInput!!.toInt(), null))
         }
     }
 
