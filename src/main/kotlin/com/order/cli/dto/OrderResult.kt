@@ -6,5 +6,5 @@ import java.math.BigDecimal
 class OrderResult(
     val isSuccess: Boolean,
     val price: BigDecimal?,
-    val orderItems: MutableList<OrderItem>
+    val orderItems: List<OrderItem>
 )

@@ -30,7 +30,7 @@ class OrderProductPrinter(
         println("지불금액: ${price}원")
     }
 
-    private fun showPriceOrdering(orderItems: MutableList<OrderItem>) {
+    private fun showPriceOrdering(orderItems: List<OrderItem>) {
         orderItems.forEach { orderItem ->
             println("${orderItem.item.name}는 개당 ${orderItem.item.price}원, ${orderItem.quantity}개 주문")
         }

@@ -27,7 +27,7 @@ class OrderServiceImp(
         val result = customer.order(orderData)
 
         itemRepository.save(item)
-        orderRepository.save(Order(null, result.price, result.orderItems))
+        orderRepository.save(Order(null, result.price, result.orderItems.toMutableList()))
 
         return result
     }
