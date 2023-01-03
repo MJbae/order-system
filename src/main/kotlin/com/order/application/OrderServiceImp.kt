@@ -23,12 +23,14 @@ class OrderServiceImp(
         val item: Item = itemRepository.findByIdInLock(orderData.itemId)
         orderData.item = item
 
-        val order = customer.order(orderData)
+        val result = customer.order(orderData)
+
+        if (!result.isSuccess) {
+            return Order()
+        }
 
         itemRepository.save(item)
-        orderRepository.save(order)
-
-        return order
+        return orderRepository.save(result.order!!)
     }
 
     fun calculatePriceWith(totalPrice: BigDecimal, itemPrice: BigDecimal, orderQuantity: Int): BigDecimal {
