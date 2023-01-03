@@ -8,6 +8,7 @@ import com.order.domain.Order
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
 import org.springframework.stereotype.Service
+import java.math.BigDecimal
 import javax.transaction.Transactional
 
 @Service
@@ -28,5 +29,10 @@ class OrderServiceImp(
         orderRepository.save(order)
 
         return order
+    }
+
+    fun calculatePriceWith(totalPrice: BigDecimal, itemPrice: BigDecimal, orderQuantity: Int): BigDecimal {
+        val priceSum = orderQuantity.times(itemPrice.toLong())
+        return totalPrice + BigDecimal.valueOf(priceSum)
     }
 }

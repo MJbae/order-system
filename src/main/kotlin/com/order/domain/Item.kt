@@ -49,9 +49,4 @@ class Item(
     override fun toString(): String {
         return "${this.id}    ${this.name}          ${this.price}원          ${this.stockQuantity}개"
     }
-
-    fun calculatePriceWith(totalPrice: BigDecimal, orderQuantity: Int): BigDecimal {
-        val priceSum = orderQuantity.times(this.price.toLong())
-        return totalPrice + BigDecimal.valueOf(priceSum)
-    }
 }
