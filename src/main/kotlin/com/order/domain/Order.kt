@@ -24,7 +24,7 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItem>
 ) {
-    fun addDeliveryFeeByAmountLimit(totalPrice: BigDecimal) {
+    fun addDeliveryFeeByAmountLimitTo(totalPrice: BigDecimal) {
 
         val freeDeliveryLimit = BigDecimal(50000)
         val deliveryFee = BigDecimal(2500)
