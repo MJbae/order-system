@@ -19,14 +19,12 @@ class Customer {
         try {
             item.decreaseStock(orderData.orderQuantity)
         } catch (e: SoldOutException) {
-            return OrderResult(false, null)
+            return OrderResult(false, totalPrice, arrayListOf())
         }
 
         order.addDeliveryFeeByAmountLimitTo(totalPrice)
 
-        order.updateWith(order.orderItems)
-
-        return OrderResult(true, order)
+        return OrderResult(true, order.price, arrayListOf())
     }
 
     private fun calculatePriceWith(totalPrice: BigDecimal, itemPrice: BigDecimal, orderQuantity: Int): BigDecimal {

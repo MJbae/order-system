@@ -1,16 +1,17 @@
 package com.order.cli.printer
 
+import com.order.cli.dto.OrderResult
 import com.order.cli.interfaces.OrderItemPrinter
-import com.order.domain.Order
 import com.order.domain.OrderItem
 import com.order.infra.OrderRepository
 import org.springframework.stereotype.Component
+import java.math.BigDecimal
 
 @Component
 class OrderProductPrinter(
     private val orderRepository: OrderRepository
-) : OrderItemPrinter<Order> {
-    override fun showBy(order: Order) {
+) : OrderItemPrinter<OrderResult> {
+    override fun showBy(order: OrderResult) {
         println("- - - - - - - - - - - - - - - - - - - -")
         order.orderItems.forEach { orderItem -> showOrderItemMessage(orderItem) }
 
@@ -18,11 +19,15 @@ class OrderProductPrinter(
         this.showPriceOrdering(order.orderItems)
 
         println("- - - - - - - - - - - - - - - - - - - -")
-        this.showPricePaying(order)
+        this.showPricePaying(order.price)
     }
 
-    private fun showPricePaying(order: Order) {
-        println("지불금액: ${order.price}원")
+    private fun showPricePaying(price: BigDecimal?) {
+        if (price == null) {
+            println("지불금액이 계산되지 않았습니다.")
+        }
+
+        println("지불금액: ${price}원")
     }
 
     private fun showPriceOrdering(orderItems: MutableList<OrderItem>) {

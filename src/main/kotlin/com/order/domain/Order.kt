@@ -19,7 +19,7 @@ class Order(
     var id: Long?,
 
     @Column(name = "order_price")
-    var price: BigDecimal,
+    var price: BigDecimal?,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItem>

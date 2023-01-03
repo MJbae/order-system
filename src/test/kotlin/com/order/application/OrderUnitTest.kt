@@ -33,7 +33,7 @@ internal class OrderUnitTest : DescribeSpec({
 
                 val result = sut.order(orderData)
 
-                result.order!!.price shouldBe expectedPrice
+                result.price shouldBe expectedPrice
             }
         }
         context("주문금액이 5만원 미만이라면") {
@@ -48,7 +48,7 @@ internal class OrderUnitTest : DescribeSpec({
 
                 val result = sut.order(orderData)
 
-                result.order!!.price shouldBe expectedPrice
+                result.price shouldBe expectedPrice
             }
         }
         context("상품의 재고 보다 많은 수량이 주문된다면") {
