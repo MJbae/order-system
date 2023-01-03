@@ -40,7 +40,7 @@ internal class OrderUnitTest : DescribeSpec({
         }
         context("주문금액이 5만원 미만이라면") {
             beforeTest {
-                orderQuantity = 2
+                orderQuantity = 1
                 stockQuantity = 7
                 itemPrice = BigDecimal.valueOf(45000)
                 deliveryFee = BigDecimal.valueOf(2500)
