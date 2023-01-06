@@ -6,39 +6,33 @@ import com.order.domain.Item
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
-import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
 
-@Transactional
 internal class OrderUnitTest : DescribeSpec({
     isolationMode = IsolationMode.InstancePerLeaf
 
     val itemName = "캠핑덕 우드롤테이블"
     val itemId = 778422L
-    var itemPrice: BigDecimal = BigDecimal.ZERO
-    var deliveryFee: BigDecimal = BigDecimal.ZERO
-    var orderQuantity = 0
-    var stockQuantity = 0
+    var itemPrice: BigDecimal
+    var deliveryFee: BigDecimal
+    var orderQuantity: Int
+    var stockQuantity: Int
 
     describe("주문 시") {
         context("주문금액이 5만원 이상이라면") {
             orderQuantity = 2
             stockQuantity = 7
             itemPrice = BigDecimal.valueOf(45000)
-
-            val sut = Customer()
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
-            val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong()))
+            val sut = Customer()
+
+            val result = sut.order(orderData)
 
             it("주문금액에 배송료를 포함하지 않는다") {
-                val result = sut.order(orderData)
-
-                result.price shouldBe expectedPrice
+                result.price shouldBe itemPrice.multiply(BigDecimal(orderQuantity))
             }
             it("주문이 성공한다") {
-                val result = sut.order(orderData)
-
                 result.isSuccess shouldBe true
             }
         }
@@ -47,20 +41,16 @@ internal class OrderUnitTest : DescribeSpec({
             stockQuantity = 7
             itemPrice = BigDecimal.valueOf(45000)
             deliveryFee = BigDecimal.valueOf(2500)
-
-            val sut = Customer()
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
-            val expectedPrice = itemPrice.multiply(BigDecimal.valueOf(orderQuantity.toLong())).add(deliveryFee)
+            val sut = Customer()
+
+            val result = sut.order(orderData)
 
             it("주문금액에 배송료를 포함한다") {
-                val result = sut.order(orderData)
-
-                result.price shouldBe expectedPrice
+                result.price shouldBe (itemPrice + deliveryFee)
             }
             it("주문이 성공한다") {
-                val result = sut.order(orderData)
-
                 result.isSuccess shouldBe true
             }
         }
@@ -68,14 +58,13 @@ internal class OrderUnitTest : DescribeSpec({
             orderQuantity = 10
             stockQuantity = 7
             itemPrice = BigDecimal.valueOf(45000)
-
-            val sut = Customer()
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
+            val sut = Customer()
+
+            val result = sut.order(orderData)
 
             it("주문이 실패한다") {
-                val result = sut.order(orderData)
-
                 result.isSuccess shouldBe false
             }
         }
