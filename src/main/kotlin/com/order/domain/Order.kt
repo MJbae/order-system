@@ -30,12 +30,12 @@ class Order(
 
     constructor() : this(null, BigDecimal(0), arrayListOf())
 
-    fun createWith(orderData: OrderData): OrderResult {
+    fun createWith(orderData: OrderData, calculator: PriceCalculator): OrderResult {
         val order = Order()
         val item = orderData.item
         var totalPrice = BigDecimal.ZERO
 
-        totalPrice = this.calculatePriceWith(totalPrice, item!!.price, orderData.orderQuantity)
+        totalPrice = calculator.totalPriceWith(totalPrice, item!!.price, orderData.orderQuantity)
 
         try {
             item.decreaseStock(orderData.orderQuantity)
