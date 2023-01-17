@@ -28,6 +28,4 @@ class OrderItem(
 
     @Column(name = "count")
     val quantity: Int
-) {
-    constructor(order: Order, item: Item, quantity: Int) : this(null, order, item, quantity)
-}
+)

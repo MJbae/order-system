@@ -37,9 +37,5 @@ class Order(
         this.price = totalPrice
     }
 
-    fun updateWith(orderItems: MutableList<OrderItem>) {
-        orderItems.forEach { orderItem -> this.orderItems.add(orderItem) }
-    }
-
     constructor() : this(null, BigDecimal(0), arrayListOf())
 }
