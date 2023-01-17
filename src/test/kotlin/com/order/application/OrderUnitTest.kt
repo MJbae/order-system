@@ -53,7 +53,6 @@ internal class OrderUnitTest : DescribeSpec({
                 itemPrice = BigDecimal.valueOf(45000),
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 10
             )
-
             val sut = Order()
 
             val result = sut.createWith(orderData, calculator)
@@ -75,3 +74,10 @@ private fun createOrderData(
     val item = Item(ITEM_ID, itemPrice, itemName, stockQuantity)
     return OrderData(ITEM_ID, orderQuantity, item)
 }
+
+//private fun execute(
+//    operation: (OrderData, PriceCalculator) -> OrderResult
+//): OrderResult {
+//    val order = Order()
+//    return operation(order)
+//}
