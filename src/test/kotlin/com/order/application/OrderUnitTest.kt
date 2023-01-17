@@ -3,6 +3,7 @@ package com.order.application
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.Order
+import com.order.domain.PriceCalculator
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -25,9 +26,10 @@ internal class OrderUnitTest : DescribeSpec({
             itemPrice = BigDecimal.valueOf(45000)
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
+            val calculator = PriceCalculator()
             val sut = Order()
 
-            val result = sut.createWith(orderData)
+            val result = sut.createWith(orderData, calculator)
 
             it("주문금액에 배송료를 포함하지 않는다") {
                 result.price shouldBe itemPrice.multiply(BigDecimal(orderQuantity))
@@ -43,9 +45,10 @@ internal class OrderUnitTest : DescribeSpec({
             deliveryFee = BigDecimal.valueOf(2500)
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
+            val calculator = PriceCalculator()
             val sut = Order()
 
-            val result = sut.createWith(orderData)
+            val result = sut.createWith(orderData, calculator)
 
             it("주문금액에 배송료를 포함한다") {
                 result.price shouldBe (itemPrice + deliveryFee)
@@ -60,9 +63,10 @@ internal class OrderUnitTest : DescribeSpec({
             itemPrice = BigDecimal.valueOf(45000)
             val item = Item(itemId, itemPrice, itemName, stockQuantity)
             val orderData = OrderData(itemId, orderQuantity, item)
+            val calculator = PriceCalculator()
             val sut = Order()
 
-            val result = sut.createWith(orderData)
+            val result = sut.createWith(orderData, calculator)
 
             it("주문이 실패한다") {
                 result.isSuccess shouldBe false
