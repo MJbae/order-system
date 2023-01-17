@@ -43,17 +43,12 @@ class Order(
             return OrderResult(false, totalPrice, arrayListOf())
         }
 
-        order.addDeliveryFeeByAmountLimitTo(totalPrice)
+        order.updateOrderPriceBy(totalPrice)
 
         return OrderResult(true, order.price, arrayListOf())
     }
 
-    private fun calculatePriceWith(totalPrice: BigDecimal, itemPrice: BigDecimal, orderQuantity: Int): BigDecimal {
-        val priceSum = orderQuantity.times(itemPrice.toLong())
-        return totalPrice + BigDecimal.valueOf(priceSum)
-    }
-
-    private fun addDeliveryFeeByAmountLimitTo(totalPrice: BigDecimal) {
+    private fun updateOrderPriceBy(totalPrice: BigDecimal) {
 
         val freeDeliveryLimit = BigDecimal(50000)
         val deliveryFee = BigDecimal(2500)
