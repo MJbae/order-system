@@ -1,6 +1,6 @@
 package com.order.cli
 
-import com.order.application.OrderServiceImp
+import com.order.application.OrderService
 import com.order.cli.dto.OrderData
 import com.order.cli.printer.ByePrinter
 import com.order.cli.printer.OrderProductPrinter
@@ -19,7 +19,7 @@ class Command(
     private val orderProductPrinter: OrderProductPrinter,
     private val itemIdPrompt: ItemIdPrompt,
     private val orderCountPrompt: OrderCountPrompt,
-    private val orderServiceImp: OrderServiceImp,
+    private val orderService: OrderService,
     private val orderData: ArrayList<OrderData>
 ) : Quit.Command {
     @ShellMethod(key = ["order", "o"], value = "order")
