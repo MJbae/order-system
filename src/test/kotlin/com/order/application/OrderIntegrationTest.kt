@@ -51,7 +51,7 @@ class OrderIntegrationTest(
         stockQuantity: Int,
         orderQuantity: Int
     ): OrderData {
-        val item = Item(this.itemId, itemPrice, itemName, stockQuantity)
+        val item = Item(itemPrice, itemName, stockQuantity)
         return OrderData(this.itemId, orderQuantity, item)
     }
 }

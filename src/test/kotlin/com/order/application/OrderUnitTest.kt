@@ -71,13 +71,13 @@ private fun createOrderData(
     stockQuantity: Int,
     orderQuantity: Int
 ): OrderData {
-    val item = Item(ITEM_ID, itemPrice, itemName, stockQuantity)
+    val item = Item(itemPrice, itemName, stockQuantity)
     return OrderData(ITEM_ID, orderQuantity, item)
 }
 
-//private fun execute(
+// private fun execute(
 //    operation: (OrderData, PriceCalculator) -> OrderResult
-//): OrderResult {
+// ): OrderResult {
 //    val order = Order()
 //    return operation(order)
-//}
+// }

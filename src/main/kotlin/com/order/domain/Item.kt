@@ -28,7 +28,7 @@ class Item(
     @Version
     private var version: Int?
 ) {
-    constructor(id: Long?, price: BigDecimal, name: String, stockQuantity: Int) : this(
+    constructor(price: BigDecimal, name: String, stockQuantity: Int) : this(
         null,
         price = price,
         name = name,
