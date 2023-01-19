@@ -31,7 +31,6 @@ class Order(
     constructor() : this(null, BigDecimal(0), arrayListOf())
 
     fun createWith(orderData: OrderData, calculator: PriceCalculator): OrderResult {
-        val order = Order()
         val item = orderData.item
         var totalPrice = BigDecimal.ZERO
 
@@ -43,9 +42,9 @@ class Order(
             return OrderResult(false, totalPrice, arrayListOf())
         }
 
-        order.updateOrderPriceBy(totalPrice)
+        this.updateOrderPriceBy(totalPrice)
 
-        return OrderResult(true, order.price, arrayListOf())
+        return OrderResult(true, this.price, arrayListOf())
     }
 
     private fun updateOrderPriceBy(totalPrice: BigDecimal) {
