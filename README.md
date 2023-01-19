@@ -19,9 +19,9 @@ docker run -it -p 50152:50152 order-system:latest
 
 ### 프로젝트 구조
 본 프로젝트는 이하의 5개 패키지로 구성
-* cli: shell 환경의 입출력 처리
-* application: 비지니스 로직 처리
-* domain: 엔티티 정의
+* cli: command 환경의 입출력 처리
+* application: 오케스트레이션 로직 처리
+* domain: 도메인 객체 정의
 * exception: 커스텀 예외 정의
 * infra: 영속적 데이터 처리
 
