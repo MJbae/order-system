@@ -2,17 +2,16 @@ package com.order.application
 
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
-import com.order.domain.Order
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.extensions.spring.SpringExtension
 import io.kotest.matchers.shouldBe
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest
+import org.springframework.boot.test.context.SpringBootTest
 import java.math.BigDecimal
 
-@DataJpaTest
+@SpringBootTest
 class OrderIntegrationTest(
     @Autowired private val itemRepository: ItemRepository,
     @Autowired private val orderRepository: OrderRepository
