@@ -13,12 +13,12 @@ import javax.transaction.Transactional
 @Service
 @Transactional
 class OrderService(
-    private val order: Order,
     private val orderRepository: OrderRepository,
     private val itemRepository: ItemRepository,
 ) {
 
     fun order(orderData: OrderData): OrderResult {
+        val order = Order()
         val calculator = PriceCalculator()
         val item: Item = itemRepository.findByIdInLock(orderData.itemId)
         orderData.item = item

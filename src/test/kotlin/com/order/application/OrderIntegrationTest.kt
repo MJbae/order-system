@@ -18,8 +18,6 @@ class OrderIntegrationTest(
 ) : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
 
-    private val order: Order = Order()
-
     init {
         this.describe("주문 시") {
             context("주문금액이 5만원 이상이라면") {
@@ -28,7 +26,7 @@ class OrderIntegrationTest(
                         itemPrice = BigDecimal.valueOf(45000),
                         itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
                     )
-                    sut = OrderService(order, orderRepository, itemRepository)
+                    sut = OrderService(orderRepository, itemRepository)
 
                     val result = sut.order(orderData)
 
