@@ -35,7 +35,7 @@ class Order(
 ) {
 
     fun placeOrder(orderData: OrderData): OrderResult {
-        val orderPrice = calculateOrderPriceFrom(orderData)
+        val orderPrice = calculateOrderPriceTotal(orderData)
         val item = orderData.item!!
 
         try {
@@ -44,17 +44,17 @@ class Order(
             return OrderResult(false, orderPrice, arrayListOf())
         }
 
-        this.addDeliveryCharge(orderPrice)
+        this.applyDeliveryCharge(orderPrice)
 
         return OrderResult(true, this.price, arrayListOf())
     }
 
-    private fun calculateOrderPriceFrom(orderData: OrderData): BigDecimal {
+    private fun calculateOrderPriceTotal(orderData: OrderData): BigDecimal {
         return orderData.item?.price!! * BigDecimal(orderData.orderQuantity)
     }
 
-    private fun addDeliveryCharge(orderPrice: BigDecimal) {
-        if (includesDeliveryFee(orderPrice)) {
+    private fun applyDeliveryCharge(orderPrice: BigDecimal) {
+        if (isDeliveryChargeRequired(orderPrice)) {
             this.price = orderPrice + deliveryCharge
             return
         }
@@ -62,8 +62,8 @@ class Order(
         this.price = orderPrice
     }
 
-    private fun includesDeliveryFee(totalPrice: BigDecimal): Boolean {
-        if (totalPrice < freeDeliveryThreshold) {
+    private fun isDeliveryChargeRequired(orderPrice: BigDecimal): Boolean {
+        if (orderPrice < freeDeliveryThreshold) {
             return true
         }
         return false
