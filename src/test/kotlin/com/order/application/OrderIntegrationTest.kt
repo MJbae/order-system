@@ -2,6 +2,7 @@ package com.order.application
 
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
+import com.order.domain.OrderFactory
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
 import io.kotest.core.spec.style.DescribeSpec
@@ -14,7 +15,8 @@ import java.math.BigDecimal
 @SpringBootTest
 class OrderIntegrationTest(
     @Autowired private val itemRepository: ItemRepository,
-    @Autowired private val orderRepository: OrderRepository
+    @Autowired private val orderRepository: OrderRepository,
+    @Autowired private val orderFactory: OrderFactory
 ) : DescribeSpec() {
     override fun extensions() = listOf(SpringExtension)
 
@@ -26,7 +28,7 @@ class OrderIntegrationTest(
                         itemPrice = BigDecimal.valueOf(45000),
                         itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
                     )
-                    sut = OrderService(orderRepository, itemRepository)
+                    sut = OrderService(orderRepository, itemRepository, orderFactory)
 
                     val result = sut.order(orderData)
 

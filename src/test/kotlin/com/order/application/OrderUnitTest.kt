@@ -2,7 +2,7 @@ package com.order.application
 
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
-import com.order.domain.Order
+import com.order.domain.OrderFactory
 import com.order.domain.PriceCalculator
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
@@ -11,15 +11,20 @@ import java.math.BigDecimal
 
 internal class OrderUnitTest : DescribeSpec({
     isolationMode = IsolationMode.InstancePerLeaf
+    val calculator = PriceCalculator()
+    val orderFactory = OrderFactory()
 
     describe("주문 시") {
         context("주문금액이 5만원 이상이라면") {
-            val calculator = PriceCalculator()
+
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
             )
-            val sut = Order()
+            val sut = orderFactory.create(
+                freeDeliveryLimit = BigDecimal(50000),
+                deliveryFee = BigDecimal(2500)
+            )
 
             val result = sut.placeOrder(orderData, calculator)
 
@@ -31,12 +36,14 @@ internal class OrderUnitTest : DescribeSpec({
             }
         }
         context("주문금액이 5만원 미만이라면") {
-            val calculator = PriceCalculator()
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 1
             )
-            val sut = Order()
+            val sut = orderFactory.create(
+                freeDeliveryLimit = BigDecimal(50000),
+                deliveryFee = BigDecimal(2500)
+            )
 
             val result = sut.placeOrder(orderData, calculator)
 
@@ -48,12 +55,14 @@ internal class OrderUnitTest : DescribeSpec({
             }
         }
         context("상품의 재고 보다 많은 수량이 주문된다면") {
-            val calculator = PriceCalculator()
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 10
             )
-            val sut = Order()
+            val sut = orderFactory.create(
+                freeDeliveryLimit = BigDecimal(50000),
+                deliveryFee = BigDecimal(2500)
+            )
 
             val result = sut.placeOrder(orderData, calculator)
 
