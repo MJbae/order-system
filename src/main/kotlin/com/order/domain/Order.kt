@@ -70,9 +70,6 @@ class Order(
     }
 
     private fun isDeliveryChargeRequired(orderPrice: BigDecimal): Boolean {
-        if (orderPrice < freeDeliveryThreshold) {
-            return true
-        }
-        return false
+        return orderPrice < freeDeliveryThreshold
     }
 }
