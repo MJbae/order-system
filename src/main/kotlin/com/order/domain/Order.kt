@@ -25,15 +25,14 @@ class Order(
     var price: BigDecimal?,
 
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
-    var orderItems: MutableList<OrderItem>
+    var orderItems: MutableList<OrderItem>,
+
+    @Transient
+    val freeDeliveryLimit: BigDecimal,
+
+    @Transient
+    val deliveryFee: BigDecimal
 ) {
-    constructor() : this(null, BigDecimal(0), arrayListOf())
-
-    @Transient
-    private val freeDeliveryLimit = BigDecimal(50000)
-
-    @Transient
-    private val deliveryFee = BigDecimal(2500)
 
     fun placeOrder(orderData: OrderData, calculator: PriceCalculator): OrderResult {
         val item = orderData.item
