@@ -4,7 +4,6 @@ import com.order.cli.dto.OrderData
 import com.order.cli.dto.OrderResult
 import com.order.domain.Item
 import com.order.domain.OrderFactory
-import com.order.domain.PriceCalculator
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
 import org.springframework.stereotype.Service
@@ -24,11 +23,10 @@ class OrderService(
             freeDeliveryLimit = BigDecimal(50000),
             deliveryFee = BigDecimal(2500)
         )
-        val calculator = PriceCalculator()
         val item: Item = itemRepository.findByIdInLock(orderData.itemId)
         orderData.item = item
 
-        val result = order.placeOrder(orderData, calculator)
+        val result = order.placeOrder(orderData)
 
         itemRepository.save(item)
         orderRepository.save(order)

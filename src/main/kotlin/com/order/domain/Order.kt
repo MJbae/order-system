@@ -34,30 +34,32 @@ class Order(
     val deliveryFee: BigDecimal
 ) {
 
-    fun placeOrder(orderData: OrderData, calculator: PriceCalculator): OrderResult {
-        val item = orderData.item
-        var totalPrice = BigDecimal.ZERO
-
-        totalPrice = calculator.totalPriceWith(totalPrice, item!!.price, orderData.orderQuantity)
+    fun placeOrder(orderData: OrderData): OrderResult {
+        val orderPrice = calculateOrderPriceFrom(orderData)
+        val item = orderData.item!!
 
         try {
             item.decreaseStock(orderData.orderQuantity)
         } catch (e: SoldOutException) {
-            return OrderResult(false, totalPrice, arrayListOf())
+            return OrderResult(false, orderPrice, arrayListOf())
         }
 
-        this.updatePrice(totalPrice)
+        this.addDeliveryFee(orderPrice)
 
         return OrderResult(true, this.price, arrayListOf())
     }
 
-    private fun updatePrice(totalPrice: BigDecimal) {
-        if (includesDeliveryFee(totalPrice)) {
-            this.price = totalPrice + deliveryFee
+    private fun calculateOrderPriceFrom(orderData: OrderData): BigDecimal {
+        return orderData.item?.price!! * BigDecimal(orderData.orderQuantity)
+    }
+
+    private fun addDeliveryFee(orderPrice: BigDecimal) {
+        if (includesDeliveryFee(orderPrice)) {
+            this.price = orderPrice + deliveryFee
             return
         }
 
-        this.price = totalPrice
+        this.price = orderPrice
     }
 
     private fun includesDeliveryFee(totalPrice: BigDecimal): Boolean {
