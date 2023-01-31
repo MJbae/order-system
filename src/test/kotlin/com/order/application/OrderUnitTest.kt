@@ -20,8 +20,8 @@ internal class OrderUnitTest : DescribeSpec({
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
             )
             val sut = orderFactory.create(
-                freeDeliveryLimit = BigDecimal(50000),
-                deliveryFee = BigDecimal(2500)
+                freeDeliveryThreshold = BigDecimal(50000),
+                deliveryCharge = BigDecimal(2500)
             )
 
             val result = sut.placeOrder(orderData)
@@ -39,8 +39,8 @@ internal class OrderUnitTest : DescribeSpec({
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 1
             )
             val sut = orderFactory.create(
-                freeDeliveryLimit = BigDecimal(50000),
-                deliveryFee = BigDecimal(2500)
+                freeDeliveryThreshold = BigDecimal(50000),
+                deliveryCharge = BigDecimal(2500)
             )
 
             val result = sut.placeOrder(orderData)
@@ -58,8 +58,8 @@ internal class OrderUnitTest : DescribeSpec({
                 itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 10
             )
             val sut = orderFactory.create(
-                freeDeliveryLimit = BigDecimal(50000),
-                deliveryFee = BigDecimal(2500)
+                freeDeliveryThreshold = BigDecimal(50000),
+                deliveryCharge = BigDecimal(2500)
             )
 
             val result = sut.placeOrder(orderData)

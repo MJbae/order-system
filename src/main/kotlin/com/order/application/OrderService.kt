@@ -20,8 +20,8 @@ class OrderService(
 
     fun order(orderData: OrderData): OrderResult {
         val order = orderFactory.create(
-            freeDeliveryLimit = BigDecimal(50000),
-            deliveryFee = BigDecimal(2500)
+            freeDeliveryThreshold = BigDecimal(50000),
+            deliveryCharge = BigDecimal(2500)
         )
         val item: Item = itemRepository.findByIdInLock(orderData.itemId)
         orderData.item = item

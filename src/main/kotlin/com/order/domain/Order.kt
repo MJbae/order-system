@@ -28,10 +28,10 @@ class Order(
     var orderItems: MutableList<OrderItem>,
 
     @Transient
-    val freeDeliveryLimit: BigDecimal,
+    val freeDeliveryThreshold: BigDecimal,
 
     @Transient
-    val deliveryFee: BigDecimal
+    val deliveryCharge: BigDecimal
 ) {
 
     fun placeOrder(orderData: OrderData): OrderResult {
@@ -44,7 +44,7 @@ class Order(
             return OrderResult(false, orderPrice, arrayListOf())
         }
 
-        this.addDeliveryFee(orderPrice)
+        this.addDeliveryCharge(orderPrice)
 
         return OrderResult(true, this.price, arrayListOf())
     }
@@ -53,9 +53,9 @@ class Order(
         return orderData.item?.price!! * BigDecimal(orderData.orderQuantity)
     }
 
-    private fun addDeliveryFee(orderPrice: BigDecimal) {
+    private fun addDeliveryCharge(orderPrice: BigDecimal) {
         if (includesDeliveryFee(orderPrice)) {
-            this.price = orderPrice + deliveryFee
+            this.price = orderPrice + deliveryCharge
             return
         }
 
@@ -63,7 +63,7 @@ class Order(
     }
 
     private fun includesDeliveryFee(totalPrice: BigDecimal): Boolean {
-        if (totalPrice < freeDeliveryLimit) {
+        if (totalPrice < freeDeliveryThreshold) {
             return true
         }
         return false
