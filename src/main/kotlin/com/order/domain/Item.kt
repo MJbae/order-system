@@ -37,10 +37,8 @@ class Item(
     )
 
     fun decreaseStock(orderQuantity: Int) {
-        val soldOutMessage = "주문한 상품의 수가 재고량 보다 많습니다."
-
         if (orderQuantity > this.stockQuantity) {
-            throw SoldOutException(soldOutMessage)
+            throw SoldOutException("주문한 상품의 수가 재고량 보다 많습니다.")
         }
 
         stockQuantity -= orderQuantity
