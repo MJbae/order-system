@@ -23,7 +23,7 @@ class OrderService(
         val item: Item = itemRepository.findByIdInLock(orderData.itemId)
         orderData.item = item
 
-        val result = order.createWith(orderData, calculator)
+        val result = order.placeOrder(orderData, calculator)
 
         itemRepository.save(item)
         orderRepository.save(Order(null, result.price, result.orderItems.toMutableList()))

@@ -30,7 +30,7 @@ class Order(
 
     constructor() : this(null, BigDecimal(0), arrayListOf())
 
-    fun createWith(orderData: OrderData, calculator: PriceCalculator): OrderResult {
+    fun placeOrder(orderData: OrderData, calculator: PriceCalculator): OrderResult {
         val item = orderData.item
         var totalPrice = BigDecimal.ZERO
 
