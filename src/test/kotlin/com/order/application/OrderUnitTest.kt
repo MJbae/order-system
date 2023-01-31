@@ -3,7 +3,6 @@ package com.order.application
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.OrderFactory
-import com.order.domain.PriceCalculator
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -11,7 +10,6 @@ import java.math.BigDecimal
 
 internal class OrderUnitTest : DescribeSpec({
     isolationMode = IsolationMode.InstancePerLeaf
-    val calculator = PriceCalculator()
     val orderFactory = OrderFactory()
 
     describe("주문 시") {
@@ -26,7 +24,7 @@ internal class OrderUnitTest : DescribeSpec({
                 deliveryFee = BigDecimal(2500)
             )
 
-            val result = sut.placeOrder(orderData, calculator)
+            val result = sut.placeOrder(orderData)
 
             it("주문금액에 배송료를 포함하지 않는다") {
                 result.price shouldBe BigDecimal.valueOf(90000)
@@ -45,7 +43,7 @@ internal class OrderUnitTest : DescribeSpec({
                 deliveryFee = BigDecimal(2500)
             )
 
-            val result = sut.placeOrder(orderData, calculator)
+            val result = sut.placeOrder(orderData)
 
             it("주문금액에 배송료를 포함한다") {
                 result.price shouldBe BigDecimal.valueOf(47500)
@@ -64,7 +62,7 @@ internal class OrderUnitTest : DescribeSpec({
                 deliveryFee = BigDecimal(2500)
             )
 
-            val result = sut.placeOrder(orderData, calculator)
+            val result = sut.placeOrder(orderData)
 
             it("주문이 실패한다") {
                 result.isSuccess shouldBe false
