@@ -3,6 +3,7 @@ package com.order.domain
 import com.order.cli.dto.OrderData
 import com.order.cli.dto.OrderResult
 import com.order.exception.SoldOutException
+import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import javax.persistence.CascadeType
 import javax.persistence.Column
@@ -33,10 +34,11 @@ class Order(
     @Transient
     val deliveryCharge: BigDecimal
 ) {
-
+    @Transient
+    private val logger = LoggerFactory.getLogger(this::class.java)
     fun placeOrder(orderData: OrderData): OrderResult {
         val orderPrice = calculateOrderPriceTotal(orderData)
-        val item = orderData.item!!
+        val item = orderData.item ?: return OrderResult(false, BigDecimal.ZERO, arrayListOf())
 
         try {
             item.decreaseStock(orderData.orderQuantity)
@@ -50,16 +52,21 @@ class Order(
     }
 
     private fun calculateOrderPriceTotal(orderData: OrderData): BigDecimal {
-        return orderData.item?.price!! * BigDecimal(orderData.orderQuantity)
+        return when (val itemPrice = orderData.item?.price) {
+            null -> {
+                logger.info("Calculation Error, Item price not found for orderData: $orderData")
+                BigDecimal.ZERO
+            }
+            else -> {
+                val orderQuantity = BigDecimal(orderData.orderQuantity)
+
+                itemPrice * orderQuantity
+            }
+        }
     }
 
     private fun applyDeliveryCharge(orderPrice: BigDecimal) {
-        if (isDeliveryChargeRequired(orderPrice)) {
-            this.price = orderPrice + deliveryCharge
-            return
-        }
-
-        this.price = orderPrice
+        this.price = if (isDeliveryChargeRequired(orderPrice)) orderPrice + deliveryCharge else orderPrice
     }
 
     private fun isDeliveryChargeRequired(orderPrice: BigDecimal): Boolean {
