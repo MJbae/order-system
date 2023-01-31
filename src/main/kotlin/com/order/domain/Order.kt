@@ -27,8 +27,13 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItem>
 ) {
-
     constructor() : this(null, BigDecimal(0), arrayListOf())
+
+    @Transient
+    private val freeDeliveryLimit = BigDecimal(50000)
+
+    @Transient
+    private val deliveryFee = BigDecimal(2500)
 
     fun placeOrder(orderData: OrderData, calculator: PriceCalculator): OrderResult {
         val item = orderData.item
@@ -42,21 +47,24 @@ class Order(
             return OrderResult(false, totalPrice, arrayListOf())
         }
 
-        this.updateOrderPriceBy(totalPrice)
+        this.updatePrice(totalPrice)
 
         return OrderResult(true, this.price, arrayListOf())
     }
 
-    private fun updateOrderPriceBy(totalPrice: BigDecimal) {
-
-        val freeDeliveryLimit = BigDecimal(50000)
-        val deliveryFee = BigDecimal(2500)
-
-        if (totalPrice < freeDeliveryLimit) {
-            this.price = totalPrice.add(deliveryFee)
+    private fun updatePrice(totalPrice: BigDecimal) {
+        if (includesDeliveryFee(totalPrice)) {
+            this.price = totalPrice + deliveryFee
             return
         }
 
         this.price = totalPrice
+    }
+
+    private fun includesDeliveryFee(totalPrice: BigDecimal): Boolean {
+        if (totalPrice < freeDeliveryLimit) {
+            return true
+        }
+        return false
     }
 }
