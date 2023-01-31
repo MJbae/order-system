@@ -19,11 +19,11 @@ docker run -it -p 50152:50152 order-system:latest
 
 ### 프로젝트 구조
 본 프로젝트는 이하의 5개 패키지로 구성
-* cli: command 환경의 입출력 처리
-* application: 오케스트레이션 로직 처리
+* cli: command 환경의 입출력 담당 객체 정의
+* application: 어플리케이션 서비스 정의
 * domain: 도메인 객체 정의
 * exception: 커스텀 예외 정의
-* infra: 영속적 데이터 처리
+* infra: 영속적 데이터 담당 객체 정의
 
 ### 사용 기술
 * Application Framework: Spring Shell
