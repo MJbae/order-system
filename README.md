@@ -9,7 +9,7 @@ docker build -t order-system:latest .
 docker run -it -p 50152:50152 order-system:latest
 ```
 
-### Implementation Procedure based on TDD
+### TDD based Implementation Procedure
 1. Write a [Flow Chart](https://github.com/MJbae/order-system/wiki/Flow-Cart) to grasp the overall logic intuitively.
 2. Implement the ordering function in the simplest way
 3. Write a test that fails for the main branch points written in the [Flow Chart](https://github.com/MJbae/order-system/wiki/Flow-Cart)
