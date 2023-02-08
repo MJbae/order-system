@@ -27,7 +27,7 @@ internal class OrderUnitTest : DescribeSpec({
             val result = sut.placeOrder(orderData)
 
             it("주문금액에 배송료를 포함하지 않는다") {
-                result.price shouldBe BigDecimal.valueOf(90000)
+                result.price?.value shouldBe BigDecimal.valueOf(90000)
             }
             it("주문이 성공한다") {
                 result.isSuccess shouldBe true
@@ -46,7 +46,7 @@ internal class OrderUnitTest : DescribeSpec({
             val result = sut.placeOrder(orderData)
 
             it("주문금액에 배송료를 포함한다") {
-                result.price shouldBe BigDecimal.valueOf(47500)
+                result.price?.value shouldBe BigDecimal.valueOf(47500)
             }
             it("주문이 성공한다") {
                 result.isSuccess shouldBe true

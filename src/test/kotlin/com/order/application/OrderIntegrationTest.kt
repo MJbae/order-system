@@ -32,7 +32,7 @@ class OrderIntegrationTest(
 
                     val result = sut.order(orderData)
 
-                    result.price shouldBe BigDecimal.valueOf(90000)
+                    result.price?.value shouldBe BigDecimal.valueOf(90000)
                     result.isSuccess shouldBe true
                 }
             }
