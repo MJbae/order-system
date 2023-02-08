@@ -1,10 +1,10 @@
 package com.order.cli.dto
 
 import com.order.domain.OrderItem
-import java.math.BigDecimal
+import com.order.domain.OrderPrice
 
 class OrderResult(
     val isSuccess: Boolean,
-    val price: BigDecimal?,
+    val price: OrderPrice?,
     val orderItems: List<OrderItem>
 )

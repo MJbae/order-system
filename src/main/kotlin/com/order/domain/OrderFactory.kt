@@ -8,10 +8,12 @@ class OrderFactory {
     fun create(freeDeliveryThreshold: BigDecimal, deliveryCharge: BigDecimal): Order {
         return Order(
             id = null,
-            price = BigDecimal.ZERO,
-            orderItems = arrayListOf(),
-            freeDeliveryThreshold = freeDeliveryThreshold,
-            deliveryCharge = deliveryCharge
+            price = OrderPrice(
+                value = BigDecimal.ZERO,
+                freeDeliveryThreshold = freeDeliveryThreshold,
+                deliveryCharge = deliveryCharge
+            ),
+            orderItems = arrayListOf()
         )
     }
 }

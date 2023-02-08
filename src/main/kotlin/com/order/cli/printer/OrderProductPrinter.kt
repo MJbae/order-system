@@ -19,7 +19,7 @@ class OrderProductPrinter(
         this.showPriceOrdering(order.orderItems)
 
         println("- - - - - - - - - - - - - - - - - - - -")
-        this.showPricePaying(order.price)
+        this.showPricePaying(order.price?.value)
     }
 
     private fun showPricePaying(price: BigDecimal?) {
