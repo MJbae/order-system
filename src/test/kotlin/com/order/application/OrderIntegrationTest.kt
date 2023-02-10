@@ -3,6 +3,7 @@ package com.order.application
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.OrderFactory
+import com.order.domain.Stock
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
 import io.kotest.core.spec.style.DescribeSpec
@@ -26,7 +27,7 @@ class OrderIntegrationTest(
                 it("주문금액에 배송료를 포함하지 않는다") {
                     val orderData = createOrderData(
                         itemPrice = BigDecimal.valueOf(45000),
-                        itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
+                        itemName = "캠핑덕 우드롤테이블", stock = Stock(7), orderQuantity = 2
                     )
                     sut = OrderService(orderRepository, itemRepository, orderFactory)
 
@@ -47,10 +48,10 @@ class OrderIntegrationTest(
     private fun createOrderData(
         itemPrice: BigDecimal,
         itemName: String,
-        stockQuantity: Int,
+        stock: Stock,
         orderQuantity: Int
     ): OrderData {
-        val item = Item(itemPrice, itemName, stockQuantity)
+        val item = Item(itemPrice, itemName, stock)
         return OrderData(this.itemId, orderQuantity, item)
     }
 }

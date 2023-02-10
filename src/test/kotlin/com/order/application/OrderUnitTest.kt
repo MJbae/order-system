@@ -3,6 +3,7 @@ package com.order.application
 import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.OrderFactory
+import com.order.domain.Stock
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -17,7 +18,7 @@ internal class OrderUnitTest : DescribeSpec({
 
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
-                itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 2
+                itemName = "캠핑덕 우드롤테이블", Stock(7), orderQuantity = 2
             )
             val sut = orderFactory.create(
                 freeDeliveryThreshold = BigDecimal(50000),
@@ -36,7 +37,7 @@ internal class OrderUnitTest : DescribeSpec({
         context("주문금액이 5만원 미만이라면") {
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
-                itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 1
+                itemName = "캠핑덕 우드롤테이블", stock = Stock(7), orderQuantity = 1
             )
             val sut = orderFactory.create(
                 freeDeliveryThreshold = BigDecimal(50000),
@@ -55,7 +56,7 @@ internal class OrderUnitTest : DescribeSpec({
         context("상품의 재고 보다 많은 수량이 주문된다면") {
             val orderData = createOrderData(
                 itemPrice = BigDecimal.valueOf(45000),
-                itemName = "캠핑덕 우드롤테이블", stockQuantity = 7, orderQuantity = 10
+                itemName = "캠핑덕 우드롤테이블", stock = Stock(7), orderQuantity = 10
             )
             val sut = orderFactory.create(
                 freeDeliveryThreshold = BigDecimal(50000),
@@ -75,9 +76,9 @@ const val ITEM_ID = 778422L
 private fun createOrderData(
     itemPrice: BigDecimal,
     itemName: String,
-    stockQuantity: Int,
+    stock: Stock,
     orderQuantity: Int
 ): OrderData {
-    val item = Item(itemPrice, itemName, stockQuantity)
+    val item = Item(itemPrice, itemName, stock)
     return OrderData(ITEM_ID, orderQuantity, item)
 }
