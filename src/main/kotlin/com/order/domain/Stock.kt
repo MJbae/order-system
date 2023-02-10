@@ -10,7 +10,7 @@ import javax.persistence.Embeddable
 @Access(AccessType.FIELD)
 data class Stock(
     @Column(name = "stock_quantity")
-    val quantity: Int
+    private val quantity: Int
 ) {
 
     fun decrease(toMinus: Int): Stock {
