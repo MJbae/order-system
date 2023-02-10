@@ -20,4 +20,8 @@ data class Stock(
 
         return Stock(this.quantity - toMinus)
     }
+
+    fun showStockQuantity(): String {
+        return "           ${this.quantity}개"
+    }
 }

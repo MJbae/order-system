@@ -40,7 +40,7 @@ class Item(
         this.stock = stock.decrease(orderQuantity)
     }
 
-    override fun toString(): String {
-        return "${this.id}    ${this.name}          ${this.price}원          ${this.stock.quantity}개"
+    fun showItem(): String {
+        return "${this.id}    ${this.name}          ${this.price}원" + stock.showStockQuantity()
     }
 }

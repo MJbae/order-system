@@ -12,7 +12,7 @@ class ProductPrinter(
     override fun show() {
         println(this.categoryMessage)
         itemRepository.findAll().forEach { item ->
-            println(item.toString())
+            println(item.showItem())
         }
     }
 }
