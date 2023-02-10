@@ -1,8 +1,8 @@
 package com.order.domain
 
-import com.order.exception.SoldOutException
 import java.math.BigDecimal
 import javax.persistence.Column
+import javax.persistence.Embedded
 import javax.persistence.Entity
 import javax.persistence.GeneratedValue
 import javax.persistence.GenerationType
@@ -23,28 +23,24 @@ class Item(
     @Column(name = "item_name")
     val name: String,
 
-    var stockQuantity: Int,
+    @Embedded var stock: Stock,
 
     @Version
     private var version: Int?
 ) {
-    constructor(price: BigDecimal, name: String, stockQuantity: Int) : this(
-        null,
+    constructor(price: BigDecimal, name: String, stock: Stock) : this(
+        id = null,
         price = price,
         name = name,
-        stockQuantity = stockQuantity,
+        stock = stock,
         version = null
     )
 
     fun decreaseStock(orderQuantity: Int) {
-        if (orderQuantity > this.stockQuantity) {
-            throw SoldOutException("주문한 상품의 수가 재고량 보다 많습니다.")
-        }
-
-        stockQuantity -= orderQuantity
+        this.stock = stock.decrease(orderQuantity)
     }
 
     override fun toString(): String {
-        return "${this.id}    ${this.name}          ${this.price}원          ${this.stockQuantity}개"
+        return "${this.id}    ${this.name}          ${this.price}원          ${this.stock.quantity}개"
     }
 }
