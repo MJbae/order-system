@@ -1,6 +1,6 @@
 package com.order.domain
 
-import com.order.cli.dto.OrderData
+import com.order.application.OrderCommand
 import com.order.cli.dto.OrderResult
 import com.order.exception.SoldOutException
 import javax.persistence.CascadeType
@@ -27,12 +27,12 @@ class Order(
     @OneToMany(mappedBy = "order", cascade = [CascadeType.ALL])
     var orderItems: MutableList<OrderItem>
 ) {
-    fun placeOrder(orderData: OrderData): OrderResult {
-        this.price = price.calculatePriceTotal(orderData)
-        val item = orderData.item ?: return OrderResult(false, price, arrayListOf())
+    fun placeOrder(orderCommand: OrderCommand): OrderResult {
+        this.price = price.calculatePriceTotal(orderCommand)
+        val item = orderCommand.item ?: return OrderResult(false, price, arrayListOf())
 
         try {
-            item.decreaseStock(orderData.orderQuantity)
+            item.decreaseStock(orderCommand.orderQuantity)
         } catch (e: SoldOutException) {
             return OrderResult(false, price, arrayListOf())
         }

@@ -1,6 +1,5 @@
 package com.order.application
 
-import com.order.cli.dto.OrderData
 import com.order.cli.dto.OrderResult
 import com.order.domain.Item
 import com.order.domain.OrderFactory
@@ -18,15 +17,15 @@ class OrderService(
     private val orderFactory: OrderFactory,
 ) {
 
-    fun order(orderData: OrderData): OrderResult {
+    fun order(orderCommand: OrderCommand): OrderResult {
+        val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
+        val newCommand = OrderCommand(orderCommand.itemId, orderCommand.orderQuantity, item)
         val order = orderFactory.create(
             freeDeliveryThreshold = BigDecimal(50000),
             deliveryCharge = BigDecimal(2500)
         )
-        val item: Item = itemRepository.findByIdInLock(orderData.itemId)
-        orderData.item = item
 
-        val result = order.placeOrder(orderData)
+        val result = order.placeOrder(newCommand)
 
         itemRepository.save(item)
         orderRepository.save(order)

@@ -1,6 +1,6 @@
 package com.order.domain
 
-import com.order.cli.dto.OrderData
+import com.order.application.OrderCommand
 import org.slf4j.LoggerFactory
 import java.math.BigDecimal
 import javax.persistence.Access
@@ -20,15 +20,15 @@ data class OrderPrice(
 ) {
     @Transient
     private val logger = LoggerFactory.getLogger(this::class.java)
-    fun calculatePriceTotal(orderData: OrderData): OrderPrice {
-        return when (val itemPrice = orderData.item?.price) {
+    fun calculatePriceTotal(orderCommand: OrderCommand): OrderPrice {
+        return when (val itemPrice = orderCommand.item?.price) {
             null -> {
-                logger.info("Calculation Error, Item price not found for orderData: $orderData")
+                logger.info("Calculation Error, Item price not found for orderData: $orderCommand")
                 OrderPrice(BigDecimal.ZERO, freeDeliveryThreshold, deliveryCharge)
             }
 
             else -> {
-                val orderQuantity = BigDecimal(orderData.orderQuantity)
+                val orderQuantity = BigDecimal(orderCommand.orderQuantity)
                 OrderPrice(itemPrice * orderQuantity, freeDeliveryThreshold, deliveryCharge)
             }
         }

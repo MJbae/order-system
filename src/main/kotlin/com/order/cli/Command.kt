@@ -1,7 +1,7 @@
 package com.order.cli
 
+import com.order.application.OrderCommand
 import com.order.application.OrderService
-import com.order.cli.dto.OrderData
 import com.order.cli.printer.ByePrinter
 import com.order.cli.printer.OrderProductPrinter
 import com.order.cli.printer.ProductPrinter
@@ -20,7 +20,7 @@ class Command(
     private val itemIdPrompt: ItemIdPrompt,
     private val orderCountPrompt: OrderCountPrompt,
     private val orderService: OrderService,
-    private val orderData: ArrayList<OrderData>
+    private val orderData: ArrayList<OrderCommand>
 ) : Quit.Command {
     @ShellMethod(key = ["order", "o"], value = "order")
     fun order() {
@@ -40,7 +40,7 @@ class Command(
             orderCountPrompt.display()
             val countInput = readLine()
 
-            orderData.add(OrderData(itemInput!!.toLong(), countInput!!.toInt(), null))
+            orderData.add(OrderCommand(itemInput!!.toLong(), countInput!!.toInt()))
         }
     }
 
