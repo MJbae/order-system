@@ -3,10 +3,10 @@ package com.order.cli
 import com.order.application.OrderCommand
 import com.order.application.OrderService
 import com.order.cli.printer.ByePrinter
-import com.order.cli.printer.OrderProductPrinter
-import com.order.cli.printer.ProductPrinter
+import com.order.cli.printer.ItemPrinter
+import com.order.cli.printer.OrderResultPrinter
 import com.order.cli.prompt.ItemIdPrompt
-import com.order.cli.prompt.OrderCountPrompt
+import com.order.cli.prompt.OrderQuantityPrompt
 import org.springframework.shell.standard.ShellComponent
 import org.springframework.shell.standard.ShellMethod
 import org.springframework.shell.standard.commands.Quit
@@ -14,33 +14,33 @@ import kotlin.system.exitProcess
 
 @ShellComponent
 class Command(
-    private val productPrinter: ProductPrinter,
+    private val itemPrinter: ItemPrinter,
     private val byePrinter: ByePrinter,
-    private val orderProductPrinter: OrderProductPrinter,
+    private val orderResultPrinter: OrderResultPrinter,
     private val itemIdPrompt: ItemIdPrompt,
-    private val orderCountPrompt: OrderCountPrompt,
+    private val orderQuantityPrompt: OrderQuantityPrompt,
     private val orderService: OrderService,
-    private val orderData: ArrayList<OrderCommand>
+    private val orderCommands: ArrayList<OrderCommand>
 ) : Quit.Command {
     @ShellMethod(key = ["order", "o"], value = "order")
     fun order() {
-        productPrinter.show()
+        itemPrinter.show()
 
         while (true) {
             itemIdPrompt.display()
             val itemInput = readLine()
 
             if (itemInput.equals(" ")) {
-                val orderResult = orderService.order(orderData[0])
-                orderProductPrinter.showBy(orderResult)
-                orderData.clear()
+                val orderResult = orderService.order(orderCommands[0])
+                orderResultPrinter.showBy(orderResult)
+                orderCommands.clear()
                 break
             }
 
-            orderCountPrompt.display()
-            val countInput = readLine()
+            orderQuantityPrompt.display()
+            val quantityInput = readLine()
 
-            orderData.add(OrderCommand(itemInput!!.toLong(), countInput!!.toInt()))
+            orderCommands.add(OrderCommand(itemInput!!.toLong(), quantityInput!!.toInt()))
         }
     }
 

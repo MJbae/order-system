@@ -39,6 +39,6 @@ class Order(
 
         this.price = price.applyDeliveryCharge()
 
-        return OrderResult(true, this.price, arrayListOf())
+        return OrderResult(true, price, arrayListOf())
     }
 }

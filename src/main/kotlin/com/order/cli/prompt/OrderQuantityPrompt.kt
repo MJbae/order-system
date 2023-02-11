@@ -4,10 +4,8 @@ import com.order.cli.interfaces.Prompt
 import org.springframework.stereotype.Component
 
 @Component
-class OrderCountPrompt : Prompt {
-    private val message = "주문수량: "
-
+class OrderQuantityPrompt : Prompt {
     override fun display() {
-        print(this.message)
+        print("주문수량: ")
     }
 }

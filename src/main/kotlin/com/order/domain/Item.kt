@@ -23,7 +23,7 @@ class Item(
     @Column(name = "item_name")
     val name: String,
 
-    @Embedded var stock: Stock,
+    @Embedded val stock: Stock,
 
     @Version
     private var version: Int?
@@ -37,7 +37,7 @@ class Item(
     )
 
     fun decreaseStock(orderQuantity: Int) {
-        this.stock = stock.decrease(orderQuantity)
+        stock.decrease(orderQuantity)
     }
 
     fun showItem(): String {
