@@ -12,11 +12,10 @@ class ItemPrinter(
     private val categoryMessage = "상품번호                 상품명               판매가격                재고수"
     override fun show() {
         println(categoryMessage)
-
         itemService.loadAll().forEach { item -> showMessageWith(item) }
     }
 
-    private fun showMessageWith(item: Item): String {
-        return "${item.id}    ${item.name}          ${item.price}원             ${item.stock.quantity}개"
+    private fun showMessageWith(item: Item) {
+        println("${item.id}    ${item.name}          ${item.price}원             ${item.stock.quantity}개")
     }
 }
