@@ -2,6 +2,7 @@ package com.order.cli.printer
 
 import com.order.application.ItemService
 import com.order.cli.interfaces.Printer
+import com.order.domain.Item
 import org.springframework.stereotype.Component
 
 @Component
@@ -12,9 +13,10 @@ class ItemPrinter(
     override fun show() {
         println(categoryMessage)
 
-        itemService.loadAll()
-            .forEach { item ->
-                println(item.showItem())
-            }
+        itemService.loadAll().forEach { item -> showMessageWith(item) }
+    }
+
+    private fun showMessageWith(item: Item): String {
+        return "${item.id}    ${item.name}          ${item.price}원             ${item.stock.quantity}개"
     }
 }

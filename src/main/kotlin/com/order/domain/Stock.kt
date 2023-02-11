@@ -10,18 +10,15 @@ import javax.persistence.Embeddable
 @Access(AccessType.FIELD)
 data class Stock(
     @Column(name = "stock_quantity")
-    private val quantity: Int
+    val quantity: Int
 ) {
 
     fun decrease(toMinus: Int): Stock {
         if (toMinus > quantity) {
+
             throw SoldOutException("주문한 상품의 수가 재고량 보다 많습니다.")
         }
 
         return Stock(this.quantity - toMinus)
-    }
-
-    fun showStockQuantity(): String {
-        return "           ${this.quantity}개"
     }
 }
