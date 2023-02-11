@@ -2,7 +2,6 @@ package com.order.domain
 
 import com.order.application.OrderCommand
 import com.order.cli.dto.OrderResult
-import com.order.exception.SoldOutException
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded
@@ -31,11 +30,7 @@ class Order(
         this.price = price.calculatePriceTotal(orderCommand)
         val item = orderCommand.item ?: return OrderResult(false, price, arrayListOf())
 
-        try {
-            item.decreaseStock(orderCommand.orderQuantity)
-        } catch (e: SoldOutException) {
-            return OrderResult(false, price, arrayListOf())
-        }
+        item.decreaseStock(orderCommand.orderQuantity)
 
         this.price = price.applyDeliveryCharge()
 

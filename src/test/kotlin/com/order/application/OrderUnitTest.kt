@@ -3,6 +3,8 @@ package com.order.application
 import com.order.domain.Item
 import com.order.domain.OrderFactory
 import com.order.domain.Stock
+import com.order.exception.SoldOutException
+import io.kotest.assertions.throwables.shouldThrow
 import io.kotest.core.spec.IsolationMode
 import io.kotest.core.spec.style.DescribeSpec
 import io.kotest.matchers.shouldBe
@@ -62,10 +64,8 @@ internal class OrderUnitTest : DescribeSpec({
                 deliveryCharge = BigDecimal(2500)
             )
 
-            val result = sut.placeOrder(orderData)
-
             it("주문이 실패한다") {
-                result.isSuccess shouldBe false
+                shouldThrow<SoldOutException> { sut.placeOrder(orderData) }
             }
         }
     }
