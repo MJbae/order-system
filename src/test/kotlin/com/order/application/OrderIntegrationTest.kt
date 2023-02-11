@@ -1,6 +1,5 @@
 package com.order.application
 
-import com.order.cli.dto.OrderData
 import com.order.domain.Item
 import com.order.domain.OrderFactory
 import com.order.domain.Stock
@@ -50,8 +49,8 @@ class OrderIntegrationTest(
         itemName: String,
         stock: Stock,
         orderQuantity: Int
-    ): OrderData {
+    ): OrderCommand {
         val item = Item(itemPrice, itemName, stock)
-        return OrderData(this.itemId, orderQuantity, item)
+        return OrderCommand(this.itemId, orderQuantity, item)
     }
 }
