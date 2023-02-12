@@ -23,7 +23,7 @@ data class OrderPrice(
     fun calculatePriceTotal(orderCommand: OrderCommand): OrderPrice {
         return when (val itemPrice = orderCommand.item?.price) {
             null -> {
-                logger.info("Calculation Error, Item price not found for orderData: $orderCommand")
+                logger.debug("Calculation Error, Item price not found for orderData: $orderCommand")
                 OrderPrice(BigDecimal.ZERO, freeDeliveryThreshold, deliveryCharge)
             }
 

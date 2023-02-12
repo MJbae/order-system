@@ -38,7 +38,7 @@ class OrderService(
 
             orderRepository.save(order)
         } catch (e: Exception) {
-            logger.info("Exception Message: ${e.message}")
+            logger.debug("Exception Message: ${e.message}")
         }
 
         return totalResult
