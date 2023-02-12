@@ -5,11 +5,11 @@ import com.order.domain.OrderPrice
 
 class OrderResult(
     val isSuccess: Boolean,
-    val price: OrderPrice?,
+    val price: OrderPrice,
     val orderItems: List<OrderItem>
 ) {
     fun add(new: OrderResult): OrderResult {
-        val newOrderPrice = this.price?.addValue(new.price!!)
+        val newOrderPrice = this.price.addValue(new.price)
         val newOrderItems = this.orderItems + new.orderItems
         return OrderResult(this.isSuccess, newOrderPrice, newOrderItems)
     }
