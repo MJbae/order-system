@@ -4,6 +4,7 @@ import com.order.domain.Item
 import com.order.domain.OrderFactory
 import com.order.infra.ItemRepository
 import com.order.infra.OrderRepository
+import org.slf4j.LoggerFactory
 import org.springframework.stereotype.Service
 import java.math.BigDecimal
 import javax.transaction.Transactional
@@ -15,17 +16,17 @@ class OrderService(
     private val itemRepository: ItemRepository,
     private val orderFactory: OrderFactory,
 ) {
-
     fun order(orderCommands: List<OrderCommand>): OrderResult {
-        var totalResult = OrderResult()
         val order = orderFactory.create(
             freeDeliveryThreshold = BigDecimal(50000),
             deliveryCharge = BigDecimal(2500)
         )
 
+        var totalResult = OrderResult()
+
         for (orderCommand in orderCommands) {
             val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
-            val newCommand = OrderCommand(orderCommand.itemId, orderCommand.orderQuantity, item)
+            val newCommand = orderCommand.addItem(item)
 
             val orderResult = order.placeOrder(newCommand)
 

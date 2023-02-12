@@ -12,4 +12,8 @@ data class OrderCommand(
         orderQuantity = orderQuantity,
         item = null
     )
+
+    fun addItem(item: Item): OrderCommand {
+        return OrderCommand(this.itemId, this.orderQuantity, item)
+    }
 }
