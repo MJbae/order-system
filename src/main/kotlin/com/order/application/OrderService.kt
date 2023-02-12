@@ -17,19 +17,25 @@ class OrderService(
     private val orderFactory: OrderFactory,
 ) {
 
-    fun order(orderCommand: OrderCommand): OrderResult {
-        val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
-        val newCommand = OrderCommand(orderCommand.itemId, orderCommand.orderQuantity, item)
+    fun order(orderCommands: List<OrderCommand>): OrderResult {
+        var totalResult = OrderResult()
         val order = orderFactory.create(
             freeDeliveryThreshold = BigDecimal(50000),
             deliveryCharge = BigDecimal(2500)
         )
 
-        val result = order.placeOrder(newCommand)
+        for (orderCommand in orderCommands) {
+            val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
+            val newCommand = OrderCommand(orderCommand.itemId, orderCommand.orderQuantity, item)
 
-        itemRepository.save(item)
+            val orderResult = order.placeOrder(newCommand)
+
+            totalResult = totalResult.add(orderResult)
+            itemRepository.save(item)
+        }
+
         orderRepository.save(order)
 
-        return result
+        return totalResult
     }
 }
