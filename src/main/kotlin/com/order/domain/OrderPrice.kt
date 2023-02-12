@@ -42,7 +42,17 @@ data class OrderPrice(
         return OrderPrice(this.value, this.freeDeliveryThreshold, this.deliveryCharge)
     }
 
+    fun addValue(toAdd: OrderPrice): OrderPrice {
+        return OrderPrice(this.value + toAdd.value, this.freeDeliveryThreshold, this.deliveryCharge)
+    }
+
     private fun isDeliveryChargeRequired(value: BigDecimal): Boolean {
         return value < freeDeliveryThreshold
     }
+
+    constructor() : this(
+        value = BigDecimal.ZERO,
+        freeDeliveryThreshold = BigDecimal.ZERO,
+        deliveryCharge = BigDecimal.ZERO
+    )
 }

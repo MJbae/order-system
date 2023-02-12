@@ -31,7 +31,7 @@ class Command(
             val itemInput = readLine()
 
             if (itemInput.equals(" ")) {
-                val orderResult = orderService.order(orderCommands[0])
+                val orderResult = orderService.order(orderCommands)
                 orderResultPrinter.showBy(orderResult)
                 orderCommands.clear()
                 break
