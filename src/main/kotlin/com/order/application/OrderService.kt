@@ -16,6 +16,7 @@ class OrderService(
     private val itemRepository: ItemRepository,
     private val orderFactory: OrderFactory,
 ) {
+    private val logger = LoggerFactory.getLogger(this::class.java)
     fun order(orderCommands: List<OrderCommand>): OrderResult {
         val order = orderFactory.create(
             freeDeliveryThreshold = BigDecimal(50000),
@@ -24,17 +25,21 @@ class OrderService(
 
         var totalResult = OrderResult()
 
-        for (orderCommand in orderCommands) {
-            val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
-            val newCommand = orderCommand.addItem(item)
+        try {
+            for (orderCommand in orderCommands) {
+                val item: Item = itemRepository.findByIdInLock(orderCommand.itemId)
+                val newCommand = orderCommand.addItem(item)
 
-            val orderResult = order.placeOrder(newCommand)
+                val orderResult = order.placeOrder(newCommand)
 
-            totalResult = totalResult.add(orderResult)
-            itemRepository.save(item)
+                totalResult = totalResult.add(orderResult)
+                itemRepository.save(item)
+            }
+
+            orderRepository.save(order)
+        } catch (e: Exception) {
+            logger.info("Exception Message: ${e.message}")
         }
-
-        orderRepository.save(order)
 
         return totalResult
     }
