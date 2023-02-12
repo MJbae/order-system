@@ -27,6 +27,8 @@ class Order(
     var orderItems: MutableList<OrderItem>
 ) {
     fun placeOrder(orderCommand: OrderCommand): OrderResult {
+        this.addOrderItem(orderCommand)
+
         this.price = price.calculatePriceTotal(orderCommand)
         val item = orderCommand.item ?: return OrderResult(false, price, arrayListOf())
 
@@ -35,5 +37,10 @@ class Order(
         this.price = price.applyDeliveryCharge()
 
         return OrderResult(true, price, arrayListOf())
+    }
+
+    private fun addOrderItem(orderCommand: OrderCommand) {
+        val orderItem = OrderItem(null, this, orderCommand.item!!, orderCommand.orderQuantity)
+        this.orderItems.add(orderItem)
     }
 }
