@@ -1,4 +1,4 @@
-package com.order.cli.dto
+package com.order.application
 
 import com.order.domain.OrderItem
 import com.order.domain.OrderPrice

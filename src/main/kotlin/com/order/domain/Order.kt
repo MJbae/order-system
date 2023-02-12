@@ -1,7 +1,7 @@
 package com.order.domain
 
 import com.order.application.OrderCommand
-import com.order.cli.dto.OrderResult
+import com.order.application.OrderResult
 import javax.persistence.CascadeType
 import javax.persistence.Column
 import javax.persistence.Embedded

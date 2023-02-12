@@ -1,6 +1,6 @@
 package com.order.cli.printer
 
-import com.order.cli.dto.OrderResult
+import com.order.application.OrderResult
 import com.order.cli.interfaces.ResultPrinter
 import org.springframework.stereotype.Component
 

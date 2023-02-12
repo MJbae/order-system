@@ -1,6 +1,5 @@
 package com.order.application
 
-import com.order.cli.dto.OrderResult
 import com.order.domain.Item
 import com.order.domain.OrderFactory
 import com.order.infra.ItemRepository
