@@ -24,15 +24,19 @@ class OrderIntegrationTest(
         this.describe("주문 시") {
             context("주문금액이 5만원 이상이라면") {
                 it("주문금액에 배송료를 포함하지 않는다") {
-                    val orderData = createOrderData(
+                    val firstOrderData = createOrderData(
                         itemPrice = BigDecimal.valueOf(45000),
                         itemName = "캠핑덕 우드롤테이블", stock = Stock(7), orderQuantity = 2
                     )
+                    val secondOrderData = createOrderData(
+                        itemPrice = BigDecimal.valueOf(45000),
+                        itemName = "캠핑덕 우드롤테이블", stock = Stock(7), orderQuantity = 5
+                    )
                     sut = OrderService(orderRepository, itemRepository, orderFactory)
 
-                    val result = sut.order(orderData)
+                    val result = sut.order(arrayListOf(firstOrderData, secondOrderData))
 
-                    result.price?.value shouldBe BigDecimal.valueOf(90000)
+                    result.price?.value shouldBe BigDecimal.valueOf(315000)
                     result.isSuccess shouldBe true
                 }
             }
