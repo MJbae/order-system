@@ -2,6 +2,7 @@ package com.order.application
 
 import com.order.domain.OrderItem
 import com.order.domain.OrderPrice
+import com.order.domain.OrderPrice.Companion.ZERO
 
 class OrderResult(
     val isSuccess: Boolean,
@@ -16,7 +17,7 @@ class OrderResult(
 
     constructor() : this(
         isSuccess = true,
-        price = OrderPrice(),
+        price = ZERO,
         orderItems = arrayListOf()
     )
 }

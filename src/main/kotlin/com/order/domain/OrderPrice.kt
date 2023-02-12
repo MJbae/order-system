@@ -50,9 +50,7 @@ data class OrderPrice(
         return value < freeDeliveryThreshold
     }
 
-    constructor() : this(
-        value = BigDecimal.ZERO,
-        freeDeliveryThreshold = BigDecimal.ZERO,
-        deliveryCharge = BigDecimal.ZERO
-    )
+    companion object {
+        val ZERO = OrderPrice(BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO)
+    }
 }
