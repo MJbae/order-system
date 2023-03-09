@@ -1,4 +1,4 @@
-FROM openjdk:11-jdk-slim AS builder
+FROM openjdk:11 AS builder
 
 ENV PROJECT_NAME order-system
 ENV HOME /usr/app
